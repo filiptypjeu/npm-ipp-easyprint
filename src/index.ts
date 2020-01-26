@@ -1,5 +1,5 @@
 import fs from "fs";
-import { ICancelJobResponse, IGetJobAttributesResponse, IGetJobsResponse, IJobTemplate, IMimeMediaType, IPrintJobResponse, IRequest, Printer } from "ipp";
+import { IMimeMediaType, IRequest, Printer, IJobStatusAttributes, IJobTemplateAttributes } from "ipp";
 
 export class IPPPrinter {
   private printer: Printer;
@@ -8,16 +8,16 @@ export class IPPPrinter {
     this.printer = new Printer(url);
   }
 
-  public printFile = async (path: string, fileType: keyof typeof IMimeMediaType, username: string, jobName: string): Promise<IPrintJobResponse> => {
+  public printFile = (path: string, fileType: keyof typeof IMimeMediaType, jobName: string, username: string): Promise<IPrintJobResponse> => {
     return new Promise((resolve, reject) => {
       fs.readFile(path, (err, data) => {
-        if (err) { reject(err); }
+        if (err) { return reject(err); }
 
         const request: IRequest = {
           "operation-attributes-tag": {
             "requesting-user-name": username,
             "document-format": fileType,
-            "job-name": jobName,
+            "job-name": jobName
           },
           // "job-attributes-tag": {
           //   "media": "na_letter_8.5x11in"
@@ -26,36 +26,44 @@ export class IPPPrinter {
         };
 
         this.printer.execute("Print-Job", request, (e, res) => {
-          if (e) { reject(e); }
+          if (e) { return reject(e); }
 
-          resolve(res);
+          if (res.statusCode !== "successful-ok") { return reject(res); }
+
+          const attr = Array.isArray(res["job-attributes-tag"]) ? res["job-attributes-tag"][0] : res["job-attributes-tag"];
+
+          resolve({
+            "job-id": attr["job-id"],
+            "job-state": attr["job-state"],
+            "job-state-reasons": attr["job-state-reasons"],
+            "number-of-intervening-jobs": attr["number-of-intervening-jobs"],
+          });
         });
       });
     });
   };
 
-  public getAllJobs = async (username?: string, attributes?: Array<keyof IJobTemplate>): Promise<IGetJobsResponse> => {
+  public getAllJobs = (username?: string, attributes: Array<keyof IJobStatusAttributes | keyof IJobTemplateAttributes> = ["job-uri", "job-id"]): Promise<any[]> => {
     return new Promise((resolve, reject) => {
       const request: IRequest = {
         "operation-attributes-tag": {
           "requesting-user-name": username ? username : "",
           "my-jobs": username ? true : false,
+          "requested-attributes": attributes,
         },
       };
 
-      if (attributes) {
-        request["operation-attributes-tag"]["requested-attributes"] = attributes;
-      }
-
       this.printer.execute("Get-Jobs", request, (e, res) => {
-        if (e) { reject(e); }
+        if (e) { return reject(e); }
 
-        resolve(res);
+        if (res.statusCode !== "successful-ok") { return reject(res); }
+
+        Array.isArray(res["job-attributes-tag"]) ? resolve(res["job-attributes-tag"]) : resolve([res["job-attributes-tag"]]);
       });
     });
   };
 
-  public getJob = async (jobId: number): Promise<IGetJobAttributesResponse> => {
+  public getJob = (jobId: number, attributes?: Array<keyof IJobStatusAttributes | keyof IJobTemplateAttributes>): Promise<any> => {
     return new Promise((resolve, reject) => {
       const request: IRequest = {
         "operation-attributes-tag": {
@@ -63,15 +71,23 @@ export class IPPPrinter {
         },
       };
 
-      this.printer.execute("Get-Job-Attributes", request, (e, res) => {
-        if (e) { reject(e); }
+      if (attributes) {
+        request["operation-attributes-tag"]["requested-attributes"] = attributes;
+      }
 
-        resolve(res);
+      this.printer.execute("Get-Job-Attributes", request, (e, res) => {
+        if (e) { return reject(e); }
+
+        if (res.statusCode !== "successful-ok") { return reject(res); }
+
+        const attr = Array.isArray(res["job-attributes-tag"]) ? res["job-attributes-tag"][0] : res["job-attributes-tag"];
+
+        resolve(attr);
       });
     });
   };
 
-  public cancelJob = async (jobId: number): Promise<ICancelJobResponse> => {
+  public cancelJob = (jobId: number): Promise<void> => {
     return new Promise((resolve, reject) => {
       const request: IRequest = {
         "operation-attributes-tag": {
@@ -80,10 +96,38 @@ export class IPPPrinter {
       };
 
       this.printer.execute("Cancel-Job", request, (e, res) => {
-        if (e) { reject(e); }
+        if (e) { return reject(e); }
 
-        resolve(res);
+        if (res.statusCode !== "successful-ok") { return reject(res); }
+
+        resolve();
       });
     });
   };
+
 }
+
+interface IPrintJobResponse {
+  "job-id"?: number;
+  "job-state"?: string;
+  "job-state-reasons"?: string | string[];
+  "number-of-intervening-jobs"?: number;
+}
+
+const p = new IPPPrinter("http://banksy.tf.fi");
+
+// p.printFile("testfile.txt", "text/plain", "UUUU", "JOBNAME").then(res => {
+//   console.log(res);
+// }).catch(e => console.log(e));
+
+// p.getAllJobs().then(res => {
+//   console.log(res);
+// }).catch(e => console.log(e));
+
+// p.getJob(9973).then(res => {
+//   console.log(res);
+// }).catch(e => console.log(e));
+
+p.cancelJob(9973).then(res => {
+  console.log(res);
+}).catch(e => console.log(e));

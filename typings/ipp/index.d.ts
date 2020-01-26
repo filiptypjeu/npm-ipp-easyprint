@@ -2,7 +2,7 @@ declare module "ipp" {
   export class Printer {
     constructor(url: string, options?: IPrinterOptions);
 
-    execute: (operation: keyof typeof PrinterOpertaion, message?: IRequest, callback?: (error: Error, response: any) => void) => void;
+    execute: (operation: keyof typeof PrinterOpertaion, message?: IRequest, callback?: (error: Error, response: IResponse) => void) => void;
   }
 
   export interface IPrinterOptions {
@@ -13,41 +13,17 @@ declare module "ipp" {
   }
 
   export interface IRequest {
-    "operation-attributes-tag": IOperationAttributesTag;
-    "job-attributes-tag"?: IJobAttributesTag;
+    "operation-attributes-tag": IOperationAttributes;
+    "job-attributes-tag"?: IJobStatusAttributes;
     data?: Buffer;
   }
 
-  export interface IPrintJobResponse {
+  export interface IResponse {
     version: string;
     statusCode: keyof typeof StatusCode;
     id: number;
-    "operation-attributes-tag": IOperationAttributesTag;
-    "job-attributes-tag": IJobAttributesTag;
-  }
-
-  export interface IGetJobsResponse {
-    version: string;
-    statusCode: keyof typeof StatusCode;
-    id: number;
-    "operation-attributes-tag": IOperationAttributesTag;
-    "job-attributes-tag": IJobAttributesTag | IJobAttributesTag[];
-  }
-
-  export interface IGetJobAttributesResponse {
-    version: string;
-    statusCode: keyof typeof StatusCode;
-    id: number;
-    "operation-attributes-tag": IOperationAttributesTag;
-    "job-attributes-tag": IJobAttributesTag;
-  }
-
-  export interface ICancelJobResponse {
-    version: string;
-    statusCode: keyof typeof StatusCode;
-    id: number;
-    "operation-attributes-tag": IOperationAttributesTag;
-    "job-attributes-tag": IJobAttributesTag;
+    "operation-attributes-tag": IOperationAttributes;
+    "job-attributes-tag": IJobStatusAttributes | IJobStatusAttributes[];
   }
 
   interface IDestionationAccesses {
@@ -110,7 +86,7 @@ declare module "ipp" {
     "output-compression-quality-factor"?: number;
   }
 
-  interface IOperationAttributesTag {
+  interface IOperationAttributes {
     "attributes-charset"?: string;
     "attributes-natural-language"?: string;
     "charge-info-message"?: string;
@@ -160,7 +136,7 @@ declare module "ipp" {
     "job-password-encryption"?: string;
     "job-state"?: string;
     "job-state-message"?: string;
-    "job-state-reasons"?: string[];
+    "job-state-reasons"?: string |string[];
     "job-uri"?: string;
     "last-document"?: boolean;
     "limit"?: number;
@@ -187,7 +163,7 @@ declare module "ipp" {
     "printer-uri"?: string;
     "printer-xri-requested"?: any[];
     "profile-uri-actual"?: string;
-    "requested-attributes"?: (keyof IJobTemplate)[];
+    "requested-attributes"?: (keyof IJobTemplateAttributes | keyof IJobStatusAttributes)[];
     "requesting-user-name"?: string;
     "requesting-user-uri"?: string;
     "resource-format"?: keyof typeof IMimeMediaType;
@@ -240,7 +216,7 @@ declare module "ipp" {
     "job-pages-col	monochrome"?: number;
   }
 
-  interface IJobAttributesTag {
+  interface IJobStatusAttributes {
     "attributes-charset"?: string;
     "attributes-natural-language"?: string;
     "chamber-humidity-actual"?: number[];
@@ -582,7 +558,7 @@ declare module "ipp" {
     "separator-sheets-type"?: string[];
   }
 
-  interface IJobTemplate {
+  interface IJobTemplateAttributes {
     "chamber-humidity"?: number;
     "chamber-temperature"?: number;
     "confirmation-sheet-print"?: boolean;
