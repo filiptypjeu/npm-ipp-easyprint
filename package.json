@@ -1,0 +1,37 @@
+{
+  "name": "ipp-easyprint",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "deploy": "bash deploy.sh",
+    "dev": "nodemon src/index.ts",
+    "test": "jest --config jestconfig.json",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "lint-fix": "tslint -p tsconfig.json --fix"
+  },
+  "author": "Filip Stenbacka",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^13.5.0",
+    "nodemon": "^1.19.4",
+    "ts-node": "^8.6.2",
+    "@types/jest": "^24.9.1",
+    "typescript": "^3.7.5",
+    "ts-jest": "^24.2.0",
+    "tslint": "^5.20.1",
+    "jest": "^24.9.0",
+    "tslint-config-prettier": "^1.18.0",
+    "prettier": "^1.19.1"
+  },
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "ipp": "^2.0.1",
+    "pdfkit": "^0.11.0"
+  }
+}
