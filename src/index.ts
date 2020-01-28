@@ -11,13 +11,15 @@ export class IPPPrinter {
   public printFile = (path: string, fileType: keyof typeof IMimeMediaType, jobName: string, username: string): Promise<IPrintJobResponse> => {
     return new Promise((resolve, reject) => {
       fs.readFile(path, (err, data) => {
-        if (err) { return reject(err); }
+        if (err) {
+          return reject(err);
+        }
 
         const request: IRequest = {
           "operation-attributes-tag": {
             "requesting-user-name": username,
             "document-format": fileType,
-            "job-name": jobName
+            "job-name": jobName,
           },
           // "job-attributes-tag": {
           //   "media": "na_letter_8.5x11in"
@@ -26,9 +28,13 @@ export class IPPPrinter {
         };
 
         this.printer.execute("Print-Job", request, (e, res) => {
-          if (e) { return reject(e); }
+          if (e) {
+            return reject(e);
+          }
 
-          if (res.statusCode !== "successful-ok") { return reject(res); }
+          if (res.statusCode !== "successful-ok") {
+            return reject(res);
+          }
 
           const attr = Array.isArray(res["job-attributes-tag"]) ? res["job-attributes-tag"][0] : res["job-attributes-tag"];
 
@@ -43,7 +49,10 @@ export class IPPPrinter {
     });
   };
 
-  public getAllJobs = (username?: string, attributes: Array<keyof IJobStatusAttributes | keyof IJobTemplateAttributes> = ["job-uri", "job-id"]): Promise<any[]> => {
+  public getAllJobs = (
+    username?: string,
+    attributes: Array<keyof IJobStatusAttributes | keyof IJobTemplateAttributes> = ["job-uri", "job-id"]
+  ): Promise<any[]> => {
     return new Promise((resolve, reject) => {
       const request: IRequest = {
         "operation-attributes-tag": {
@@ -54,9 +63,13 @@ export class IPPPrinter {
       };
 
       this.printer.execute("Get-Jobs", request, (e, res) => {
-        if (e) { return reject(e); }
+        if (e) {
+          return reject(e);
+        }
 
-        if (res.statusCode !== "successful-ok") { return reject(res); }
+        if (res.statusCode !== "successful-ok") {
+          return reject(res);
+        }
 
         Array.isArray(res["job-attributes-tag"]) ? resolve(res["job-attributes-tag"]) : resolve([res["job-attributes-tag"]]);
       });
@@ -76,9 +89,13 @@ export class IPPPrinter {
       }
 
       this.printer.execute("Get-Job-Attributes", request, (e, res) => {
-        if (e) { return reject(e); }
+        if (e) {
+          return reject(e);
+        }
 
-        if (res.statusCode !== "successful-ok") { return reject(res); }
+        if (res.statusCode !== "successful-ok") {
+          return reject(res);
+        }
 
         const attr = Array.isArray(res["job-attributes-tag"]) ? res["job-attributes-tag"][0] : res["job-attributes-tag"];
 
@@ -96,15 +113,18 @@ export class IPPPrinter {
       };
 
       this.printer.execute("Cancel-Job", request, (e, res) => {
-        if (e) { return reject(e); }
+        if (e) {
+          return reject(e);
+        }
 
-        if (res.statusCode !== "successful-ok") { return reject(res); }
+        if (res.statusCode !== "successful-ok") {
+          return reject(res);
+        }
 
         resolve();
       });
     });
   };
-
 }
 
 interface IPrintJobResponse {
@@ -128,6 +148,8 @@ const p = new IPPPrinter("http://banksy.tf.fi");
 //   console.log(res);
 // }).catch(e => console.log(e));
 
-p.cancelJob(9973).then(res => {
-  console.log(res);
-}).catch(e => console.log(e));
+p.cancelJob(9973)
+  .then(res => {
+    console.log(res);
+  })
+  .catch(e => console.log(e));
