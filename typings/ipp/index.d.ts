@@ -24,6 +24,7 @@ declare module "ipp" {
     id: number;
     "operation-attributes-tag": IOperationAttributes;
     "job-attributes-tag": IJobStatusAttributes | IJobStatusAttributes[];
+    "printer-attributes-tag": 
   }
 
   interface IDestionationAccesses {

@@ -14,7 +14,8 @@
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
-    "test": "jest --config jestconfig.json",
+    "start": "node dist/index.js",
+    "test": "jest --config jestconfig.json --passWithNoTests",
     "version": "npm run format && git add -A src"
   },
   "author": "Filip Stenbacka",

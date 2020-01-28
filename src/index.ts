@@ -8,6 +8,13 @@ export class IPPPrinter {
     this.printer = new Printer(url);
   }
 
+  public printerStatus = () => {
+    this.printer.execute("Get-Printer-Attributes", undefined, (e, res) => {
+      if (e) console.log(e);
+      else console.log(res);
+    })
+  }
+
   public printFile = (
     path: string,
     fileType: keyof typeof IMimeMediaType,
@@ -145,6 +152,8 @@ const p = new IPPPrinter("http://banksy.tf.fi");
 //   console.log(res);
 // }).catch(e => console.log(e));
 
+p.printerStatus();
+
 // p.getAllJobs().then(res => {
 //   console.log(res);
 // }).catch(e => console.log(e));
@@ -153,8 +162,8 @@ const p = new IPPPrinter("http://banksy.tf.fi");
 //   console.log(res);
 // }).catch(e => console.log(e));
 
-p.cancelJob(9973)
-  .then(res => {
-    console.log(res);
-  })
-  .catch(e => console.log(e));
+// p.cancelJob(9973)
+//   .then(res => {
+//     console.log(res);
+//   })
+//   .catch(e => console.log(e));
