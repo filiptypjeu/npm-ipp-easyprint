@@ -8,7 +8,12 @@ export class IPPPrinter {
     this.printer = new Printer(url);
   }
 
-  public printFile = (path: string, fileType: keyof typeof IMimeMediaType, jobName: string, username: string): Promise<IPrintJobResponse> => {
+  public printFile = (
+    path: string,
+    fileType: keyof typeof IMimeMediaType,
+    jobName: string,
+    username: string
+  ): Promise<IPrintJobResponse> => {
     return new Promise((resolve, reject) => {
       fs.readFile(path, (err, data) => {
         if (err) {
