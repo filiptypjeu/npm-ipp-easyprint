@@ -29,6 +29,7 @@
     "tslint-config-prettier": "^1.18.0",
     "prettier": "^1.19.1"
   },
+  "types": "dist/index.d.ts",
   "dependencies": {
     "fs": "0.0.1-security",
     "ipp": "^2.0.1",
@@ -42,5 +43,9 @@
     "ipp",
     "printer",
     "print"
-  ]
+  ],
+  "files": [
+      "dist/**/*"
+  ],
+  "homepage": "https://github.com/filiptypjeu/npm-ipp-easyprint"
 }
