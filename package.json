@@ -1,19 +1,19 @@
 {
   "name": "ipp-easyprint",
   "version": "1.0.0",
-  "description": "",
+  "description": "NPM package that allows easy printing via IPP.",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/index.js",
     "build": "tsc",
-    "deploy": "bash deploy.sh",
-    "dev": "nodemon src/index.ts",
-    "test": "jest --config jestconfig.json",
-    "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
-    "lint-fix": "tslint -p tsconfig.json --fix"
+    "lint-fix": "tslint -p tsconfig.json --fix",
+    "test": "jest --config jestconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "author": "Filip Stenbacka",
   "license": "ISC",
@@ -33,5 +33,14 @@
     "fs": "0.0.1-security",
     "ipp": "^2.0.1",
     "pdfkit": "^0.11.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:filiptypjeu/npm-easyprint.git"
+  },
+  "keywords": [
+    "ipp",
+    "printer",
+    "print"
+  ]
 }
