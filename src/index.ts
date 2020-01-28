@@ -1,5 +1,5 @@
 import fs from "fs";
-import { IMimeMediaType, IRequest, Printer, IJobStatusAttributes, IJobTemplateAttributes } from "ipp";
+import { IJobStatusAttributes, IJobTemplateAttributes, IMimeMediaType, IRequest, Printer } from "ipp";
 
 export class IPPPrinter {
   private printer: Printer;
