@@ -1,6 +1,6 @@
 {
   "name": "ipp-easyprint",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "NPM package that allows easy printing via IPP.",
   "main": "dist/index.js",
   "scripts": {
@@ -47,7 +47,7 @@
     "print"
   ],
   "files": [
-      "dist/**/*"
+    "dist/**/*"
   ],
   "homepage": "https://github.com/filiptypjeu/npm-ipp-easyprint"
 }
