@@ -1,5 +1,5 @@
 import fs from "fs";
-import { IJobStatusAttributes, IJobTemplateAttributes, IMimeMediaType, IRequest, Printer } from "ipp";
+import { IJobStatusAttributes, IJobTemplateAttributes, MimeMediaType, IRequest, Printer } from "ipp";
 
 export class IPPPrinter {
   private printer: Printer;
@@ -10,14 +10,17 @@ export class IPPPrinter {
 
   public printerStatus = () => {
     this.printer.execute("Get-Printer-Attributes", undefined, (e, res) => {
-      if (e) console.log(e);
-      else console.log(res);
-    })
-  }
+      if (e) {
+        console.log(e);
+      } else {
+        console.log(res);
+      }
+    });
+  };
 
   public printFile = (
     path: string,
-    fileType: keyof typeof IMimeMediaType,
+    fileType: keyof typeof MimeMediaType,
     jobName: string,
     username: string
   ): Promise<IPrintJobResponse> => {

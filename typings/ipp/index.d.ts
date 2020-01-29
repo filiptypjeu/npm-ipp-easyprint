@@ -3,7 +3,6 @@ declare module "ipp" {
     constructor(url: string, options?: IPrinterOptions);
 
     execute: (operation: keyof typeof PrinterOpertaion, message?: IRequest, callback?: (error: Error, response: IResponse) => void) => void;
-
   }
 
   export interface IPrinterOptions {
@@ -99,7 +98,7 @@ declare module "ipp" {
       "attributes-natural-language": string;
       "status-message"?: string;
       "detailed-status-message"?: string;
-    }
+    };
     "unsupported-attributes"?: string[];
   }
 
@@ -125,7 +124,7 @@ declare module "ipp" {
       "ipp-attribute-fidelity"?: boolean;
       "document-name"?: string;
       "document-natural-language"?: string;
-      "compression"?: keyof typeof Compression;
+      compression?: keyof typeof Compression;
       "job-k-octets"?: number;
       "job-impressions"?: number;
       "job-media-sheets"?: number;
@@ -143,7 +142,7 @@ declare module "ipp" {
       "attributes-natural-language": string;
       "status-message"?: string;
       "detailed-status-message"?: string;
-    }
+    };
     "unsupported-attributes"?: string[];
     "job-attributes-tag": {
       "job-id": number;
@@ -154,7 +153,6 @@ declare module "ipp" {
       "number-of-intervening-jobs"?: number;
     };
   }
-
 
   // PRINT-URI
 
@@ -169,7 +167,7 @@ declare module "ipp" {
       "ipp-attribute-fidelity"?: boolean;
       "document-name"?: string;
       "document-natural-language"?: string;
-      "compression"?: keyof typeof Compression;
+      compression?: keyof typeof Compression;
       "job-k-octets"?: number;
       "job-impressions"?: number;
       "job-media-sheets"?: number;
@@ -177,7 +175,6 @@ declare module "ipp" {
     };
     "job-attributes-tag"?: IJobTemplateAttributes;
   }
-
 
   // VALIDATE-JOB
 
@@ -192,14 +189,13 @@ declare module "ipp" {
       "ipp-attribute-fidelity"?: boolean;
       "document-name"?: string;
       "document-natural-language"?: string;
-      "compression"?: keyof typeof Compression;
+      compression?: keyof typeof Compression;
       "job-k-octets"?: number;
       "job-impressions"?: number;
       "job-media-sheets"?: number;
     };
     "job-attributes-tag"?: IJobTemplateAttributes;
   }
-
 
   // CREATE-JOB
 
@@ -217,7 +213,6 @@ declare module "ipp" {
     };
     "job-attributes-tag"?: IJobTemplateAttributes;
   }
-
 
   // GET-PRINTER-ATTRIBUTES
 
@@ -241,11 +236,10 @@ declare module "ipp" {
       "attributes-natural-language": string;
       "status-message"?: string;
       "detailed-status-message"?: string;
-    }
+    };
     "unsupported-attributes"?: string[];
     "printer-attributes-tag": IPrinterDescription;
   }
-
 
   // GET-JOBS
 
@@ -254,7 +248,7 @@ declare module "ipp" {
       "attributes-charset": keyof typeof CharacterSet;
       "attributes-natural-language": string;
       "requesting-user-name": string;
-      "limit"?: number;
+      limit?: number;
       "requested-attributes"?: (keyof typeof RequestedJobAttributeGroups | keyof IJobTemplateAttributes | keyof IJobStatusAttributes)[];
       "which-jobs"?: keyof typeof WhichJobs;
       "my-jobs"?: boolean;
@@ -271,11 +265,10 @@ declare module "ipp" {
       "attributes-natural-language": string;
       "status-message"?: string;
       "detailed-status-message"?: string;
-    }
+    };
     "unsupported-attributes"?: string[];
     "job-attributes-tag"?: IJobTemplateAttributes | IJobTemplateAttributes[];
   }
-
 
   // SEND-DOCUMENT
 
@@ -288,7 +281,7 @@ declare module "ipp" {
       "job-uri"?: string;
       "requesting-user-name": string;
       "document-name"?: string;
-      "compression"?: keyof typeof Compression;
+      compression?: keyof typeof Compression;
       "document-format"?: keyof typeof MimeMediaType;
       "document-natural-language"?: string;
       "last-document": boolean;
@@ -305,7 +298,7 @@ declare module "ipp" {
       "attributes-natural-language": string;
       "status-message"?: string;
       "detailed-status-message"?: string;
-    }
+    };
     "unsupported-attributes"?: string[];
     "job-attributes-tag": {
       "job-id": number;
@@ -317,7 +310,6 @@ declare module "ipp" {
     };
   }
 
-  
   // SEND-URI
 
   interface ISendURIRequest {
@@ -329,14 +321,13 @@ declare module "ipp" {
       "job-uri"?: string;
       "requesting-user-name": string;
       "document-name"?: string;
-      "compression"?: keyof typeof Compression;
+      compression?: keyof typeof Compression;
       "document-format"?: keyof typeof MimeMediaType;
       "document-natural-language"?: string;
       "last-document": boolean;
       "document-uri": string;
     };
   }
-
 
   // CANCEL-/RELEASE-JOB
 
@@ -348,10 +339,9 @@ declare module "ipp" {
       "job-id"?: number;
       "job-uri"?: string;
       "requesting-user-name": string;
-      "message"?: string;
+      message?: string;
     };
   }
-
 
   // GET-JOB-ATTRIBUTES
 
@@ -375,11 +365,10 @@ declare module "ipp" {
       "attributes-natural-language": string;
       "status-message"?: string;
       "detailed-status-message"?: string;
-    }
+    };
     "unsupported-attributes"?: string[];
     "job-attributes-tag": IJobTemplateAttributes;
   }
-
 
   // HOLD-/RESTARTJOB
 
@@ -391,21 +380,16 @@ declare module "ipp" {
       "job-id"?: number;
       "job-uri"?: string;
       "requesting-user-name": string;
-      "message"?: string;
+      message?: string;
       "job-hold-until"?: keyof typeof JobHoldUntil;
     };
   }
-
-
-
-
-
 
   interface IOperationAttributes {
     "attributes-charset"?: string;
     "attributes-natural-language"?: string;
     "charge-info-message"?: string;
-    "compression"?: keyof typeof Compression;
+    compression?: keyof typeof Compression;
     "compression-accepted"?: (keyof typeof Compression)[];
     "destination-accesses"?: IDestionationAccesses[];
     "detailed-status-message"?: string;
@@ -454,8 +438,8 @@ declare module "ipp" {
     "job-state-reasons"?: (keyof typeof JobStateReasons)[];
     "job-uri"?: string;
     "last-document"?: boolean;
-    "limit"?: number;
-    "message"?: string;
+    limit?: number;
+    message?: string;
     "my-jobs"?: boolean;
     "notify-get-interval"?: number;
     "notify-printer-ids"?: number[];
@@ -478,7 +462,13 @@ declare module "ipp" {
     "printer-uri"?: string;
     "printer-xri-requested"?: any[];
     "profile-uri-actual"?: string;
-    "requested-attributes"?: (keyof typeof RequestedJobAttributeGroups | keyof typeof RequestedPrinterAttributeGroups | keyof IJobTemplateAttributes | keyof IJobStatusAttributes | keyof IPrinterDescription)[];
+    "requested-attributes"?: (
+      | keyof typeof RequestedJobAttributeGroups
+      | keyof typeof RequestedPrinterAttributeGroups
+      | keyof IJobTemplateAttributes
+      | keyof IJobStatusAttributes
+      | keyof IPrinterDescription
+    )[];
     "requesting-user-name"?: string;
     "requesting-user-uri"?: string;
     "resource-format"?: keyof typeof MimeMediaType;
@@ -517,12 +507,12 @@ declare module "ipp" {
     "chamber-humidity"?: number;
     "chamber-temperature"?: number;
     "confirmation-sheet-print"?: boolean;
-    "copies"?: number;
+    copies?: number;
     "cover-back"?: ICover;
     "cover-front"?: ICover;
     "cover-sheet-info"?: ICoverSheetInfo;
     "destination-uris"?: IDestinationUris[];
-    "finishings"?: string[];
+    finishings?: string[];
     "finishings-col"?: IFinishings[];
     "font-name-requested"?: string;
     "font-size-requested"?: number;
@@ -535,8 +525,8 @@ declare module "ipp" {
     "job-accounting-user-id"?: string;
     "job-cancel-after"?: number;
     "job-copies"?: number;
-    "job-cover-back"?: ICover
-    "job-cover-front"?: ICover
+    "job-cover-back"?: ICover;
+    "job-cover-front"?: ICover;
     "job-delay-output-until"?: string;
     "job-delay-output-until-time"?: string;
     "job-error-action"?: keyof typeof JobErrorAction;
@@ -558,7 +548,7 @@ declare module "ipp" {
     "job-sheets"?: keyof typeof JobSheets;
     "job-sheets-col"?: IJobSheets;
     "materials-col"?: IMaterials[];
-    "media"?: string;
+    media?: string;
     "media-col"?: IMedia;
     "media-input-tray-check"?: string;
     "multiple-document-handling"?: keyof typeof MultipleDocumentHandling;
@@ -568,7 +558,7 @@ declare module "ipp" {
     "orientation-requested"?: string;
     "output-bin"?: string;
     "output-device"?: string;
-    "overrides"?: any[];
+    overrides?: any[];
     "page-delivery"?: keyof typeof PageDelivery;
     "page-order-received"?: keyof typeof PageOrder;
     "page-ranges": string;
@@ -592,7 +582,7 @@ declare module "ipp" {
     "retry-interval"?: number;
     "retry-time-out"?: number;
     "separator-sheets"?: ISeparatorSheets;
-    "sides"?: keyof typeof Sides;
+    sides?: keyof typeof Sides;
     "x-image-position"?: keyof typeof XImagePosition;
     "x-image-shift"?: number;
     "x-side1-image-shift"?: number;
@@ -613,7 +603,7 @@ declare module "ipp" {
     "cover-back-actual"?: ICover[];
     "cover-front-actual"?: ICover[];
     "date-time-at-completed"?: string;
-    "date-time-at-creation"?: string
+    "date-time-at-creation"?: string;
     "date-time-at-processing"?: string;
     "destination-statuses"?: IDestinationStatuses[];
     "document-charset-supplied"?: string;
@@ -760,7 +750,7 @@ declare module "ipp" {
     "document-digital-signature-default"?: keyof typeof DocumentDigitalSignature;
     "document-digital-signature-supported"?: (keyof typeof DocumentDigitalSignature)[];
     "document-format-default"?: MimeMediaType;
-    "document-format-details-default"?: IDocumentFormatDetails
+    "document-format-details-default"?: IDocumentFormatDetails;
     "document-format-details-supported"?: string[];
     "document-format-supported"?: MimeMediaType[];
     "document-format-version-default"?: string;
@@ -951,7 +941,7 @@ declare module "ipp" {
     "notify-events-supported"?: (keyof typeof NotifyEvents)[];
     "notify-lease-duration-default"?: number;
     "notify-lease-duration-supported"?: (number | string)[];
-    "notify-pull-method-supported"?: ("ippget")[];
+    "notify-pull-method-supported"?: "ippget"[];
     "notify-schemes-supported"?: any[];
     "number-of-retries-default"?: number;
     "number-of-retries-supported"?: string;
@@ -961,7 +951,7 @@ declare module "ipp" {
     "oauth-authorization-server-uri"?: string;
     "operations-supported"?: string[];
     "organization-name-supported"?: number;
-    "orientation-requested-default"?: string
+    "orientation-requested-default"?: string;
     "orientation-requested-supported"?: string[];
     "output-attributes-default"?: IOutputAttributes;
     "output-attributes-supported"?: string[];
@@ -1152,7 +1142,7 @@ declare module "ipp" {
     "printer-more-info"?: string;
     "printer-output-tray"?: string[];
     "printer-pages-completed"?: number;
-    "printer-pages-completed-col"?: IPages ;
+    "printer-pages-completed-col"?: IPages;
     "printer-service-type"?: keyof typeof PrinterServiceType;
     "printer-settable-attributes-supported"?: (keyof IJobTemplateAttributes | "none")[];
     "printer-state"?: keyof typeof PrinterState;
@@ -1193,7 +1183,7 @@ declare module "ipp" {
     "y-origin"?: string;
   }
 
-  interface IJobConstraintsSupported{
+  interface IJobConstraintsSupported {
     "resolver-name"?: string;
   }
 
@@ -1201,7 +1191,7 @@ declare module "ipp" {
     "preset-name"?: string;
   }
 
-  interface IJobResolversSupported{
+  interface IJobResolversSupported {
     "resolver-name"?: string;
   }
 
@@ -1227,7 +1217,7 @@ declare module "ipp" {
     "contact-vcard"?: string[];
   }
 
-  interface IPrinterIccProfiles{
+  interface IPrinterIccProfiles {
     "profile-name"?: string;
     "profile-url"?: string;
   }
@@ -1251,40 +1241,40 @@ declare module "ipp" {
   }
 
   interface IImpressions {
-    "blank"?: number;
+    blank?: number;
     "blank-two-sided"?: number;
     "full-color"?: number;
     "full-color-two-sided"?: number;
     "highlight-color"?: number;
     "highlight-color-two-sided"?: number;
-    "monochrome"?: number;
+    monochrome?: number;
     "monochrome-two-sided"?: number;
   }
 
   interface IMediaSheets {
-    "blank"?: number;
+    blank?: number;
     "full-color"?: number;
     "highlight-color"?: number;
-    "monochrome"?: number;
+    monochrome?: number;
   }
 
   interface IPages {
     "full-color"?: number;
-    "monochrome"?: number;
+    monochrome?: number;
   }
 
   interface ICover {
     "cover-type"?: keyof typeof CoverType;
-    "media"?: string;
-    "media-col"?: IMedia[]
+    media?: string;
+    "media-col"?: IMedia[];
   }
 
   interface ICoverSheetInfo {
     "from-name"?: string;
-    "logo"?: string;
-    "message"?: string;
+    logo?: string;
+    message?: string;
     "organization-name"?: string;
-    "subject"?: string;
+    subject?: string;
     "to-name"?: string;
   }
 
@@ -1348,42 +1338,41 @@ declare module "ipp" {
     "trimming-when"?: string;
   }
 
-
   interface IFinishings {
-    "baling"?: IFinishingBailing;
-    "binding"?: IFinishingBinding;
-    "coating"?: IFinishingCoating;
-    "covering"?: IFinishingCovering;
+    baling?: IFinishingBailing;
+    binding?: IFinishingBinding;
+    coating?: IFinishingCoating;
+    covering?: IFinishingCovering;
     "finishing-template"?: string;
-    "folding"?: IFinishingFolding[];
+    folding?: IFinishingFolding[];
     "imposition-template"?: keyof typeof ImpositionTemplate;
-    "laminating"?: IFinishingLaminating;
+    laminating?: IFinishingLaminating;
     "media-sheets-supported"?: string;
     "media-size"?: IMediaSize;
     "media-size-name"?: string;
-    "punching"?: IFinishingPunching;
-    "stitching"?: IFinishingStitching;
-    "trimming"?: IFinishingTrimming[];
+    punching?: IFinishingPunching;
+    stitching?: IFinishingStitching;
+    trimming?: IFinishingTrimming[];
   }
 
   interface IInsertSheet {
     "insert-after-page-number"?: number;
     "insert-count"?: number;
-    "media"?: string;
+    media?: string;
     "media-col"?: IMedia;
   }
 
   interface IJobAccontingSheets {
     "job-accounting-output-bin"?: keyof typeof OutputBin;
     "job-accounting-sheets-type"?: "none" | "standard";
-    "media"?: string;
+    media?: string;
     "media-col"?: IMedia;
   }
 
   interface IJobErrorSheet {
     "job-error-sheet-type"?: "none" | "standard";
     "job-error-sheet-when"?: "always" | "on-error";
-    "media"?: string;
+    media?: string;
     "media-col"?: IMedia;
   }
 
@@ -1400,7 +1389,7 @@ declare module "ipp" {
 
   interface IJobSheets {
     "job-sheets"?: keyof typeof JobSheets;
-    "media"?: string;
+    media?: string;
     "media-col"?: IMedia;
   }
 
@@ -1485,17 +1474,16 @@ declare module "ipp" {
   }
 
   interface IProofPrint {
-    "media"?: string;
+    media?: string;
     "media-col"?: IMedia;
     "proof-print-copies"?: number;
   }
 
   interface ISeparatorSheets {
-    "media"?: string;
+    media?: string;
     "media-col"?: IMedia;
     "separator-sheets-type"?: (keyof typeof SeparatorSheetsType)[];
   }
-
 
   const enum StatusCode {
     "successful-ok",
@@ -1629,7 +1617,6 @@ declare module "ipp" {
     "text/x-sgml",
   }
 
-
   const enum PrinterOpertaion {
     "Acknowledge-Document",
     "Acknowledge-Identify-Printer",
@@ -1735,7 +1722,7 @@ declare module "ipp" {
     "compress",
     "deflate",
     "gzip",
-    "none"
+    "none",
   }
 
   const enum CoverType {
@@ -1743,7 +1730,7 @@ declare module "ipp" {
     "print-back",
     "print-both",
     "print-front",
-    "print-none"
+    "print-none",
   }
 
   const enum DocumentDigitalSignature {
@@ -1751,7 +1738,7 @@ declare module "ipp" {
     "none",
     "pgp",
     "smime",
-    "xmldsig"
+    "xmldsig",
   }
 
   const enum DocumentStateReasons {
@@ -1789,24 +1776,24 @@ declare module "ipp" {
     "transforming",
     "unsupported-compression",
     "unsupported-document-format",
-    "warnings-detected"
+    "warnings-detected",
   }
 
   const enum FeedOrientation {
     "long-edge-first",
-    "short-edge-first"
+    "short-edge-first",
   }
 
   const enum IdentifyActions {
     "display",
     "flash",
     "sound",
-    "speak"
+    "speak",
   }
 
   const enum ImpositionTemplate {
     "none",
-    "signature"
+    "signature",
   }
 
   const enum IppFeatures {
@@ -1816,7 +1803,7 @@ declare module "ipp" {
     "none",
     "page-overrides",
     "proof-print",
-    "subscription-object"
+    "subscription-object",
   }
 
   // enum IppVersions {
@@ -1831,7 +1818,7 @@ declare module "ipp" {
     "abort-job",
     "cancel-job",
     "continue-job",
-    "suspend-job"
+    "suspend-job",
   }
 
   const enum JobHoldUntil {
@@ -1842,7 +1829,7 @@ declare module "ipp" {
     "no-hold",
     "second-shift",
     "third-shift",
-    "weekend"
+    "weekend",
   }
 
   const enum JobPasswordEncryption {
@@ -1850,7 +1837,7 @@ declare module "ipp" {
     "md4",
     "md5",
     "none",
-    "sha"
+    "sha",
   }
 
   const enum JobSheets {
@@ -1859,7 +1846,7 @@ declare module "ipp" {
     "job-end-sheet",
     "job-start-sheet",
     "none",
-    "standard"
+    "standard",
   }
 
   const enum JobStateReasons {
@@ -1919,7 +1906,7 @@ declare module "ipp" {
     "submission-interrupted",
     "unsupported-compression",
     "unsupported-document-format",
-    "warnings-detected"
+    "warnings-detected",
   }
 
   const enum MediaCoating {
@@ -1928,7 +1915,7 @@ declare module "ipp" {
     "matte",
     "none",
     "satin",
-    "semi-gloss"
+    "semi-gloss",
   }
 
   const enum MediaColSupported {
@@ -1937,7 +1924,7 @@ declare module "ipp" {
     "media-right-margin",
     "media-size-name",
     "media-source",
-    "media-top-margin"
+    "media-top-margin",
   }
 
   const enum MediaColor {
@@ -1952,23 +1939,23 @@ declare module "ipp" {
     "pink",
     "red",
     "white",
-    "yellow"
+    "yellow",
   }
 
   const enum MediaGrain {
     "x-direction",
-    "y-direction"
+    "y-direction",
   }
 
   const enum MediaPrePrinted {
     "blank",
     "letter-head",
-    "pre-printed"
+    "pre-printed",
   }
 
   const enum MediaRecycled {
     "none",
-    "standard"
+    "standard",
   }
 
   const enum IMediaSizeName {
@@ -2206,7 +2193,7 @@ declare module "ipp" {
     "roc_8k_10.75x15.5in",
     "roc_16k_7.75x10.75in",
     "super-b",
-    "tabloid"
+    "tabloid",
   }
 
   const enum IMediaName {
@@ -2429,9 +2416,9 @@ declare module "ipp" {
     "na-letter-colored",
     "na-letter-transparent",
     "na-letter-white",
-    "quarto-white"
+    "quarto-white",
   }
-  
+
   const enum IMediaType {
     "bond",
     "heavyweight",
@@ -2441,7 +2428,7 @@ declare module "ipp" {
     "pre-printed",
     "pre-punched",
     "recycled",
-    "transparency"
+    "transparency",
   }
 
   const enum IMediaInputTray {
@@ -2463,7 +2450,7 @@ declare module "ipp" {
     "tray-7",
     "tray-8",
     "tray-9",
-    "tray-10"
+    "tray-10",
   }
 
   const enum IMediaEnvelopeName {
@@ -2483,7 +2470,7 @@ declare module "ipp" {
     "na-10x14-envelope",
     "na-10x15-envelope",
     "na-number-9-envelope",
-    "na-number-10-envelope"
+    "na-number-10-envelope",
   }
 
   const enum MediaSource {
@@ -2536,7 +2523,7 @@ declare module "ipp" {
     "tray-17",
     "tray-18",
     "tray-19",
-    "tray-20"
+    "tray-20",
   }
 
   const enum MediaTooth {
@@ -2549,7 +2536,7 @@ declare module "ipp" {
     "smooth",
     "stipple",
     "uncalendared",
-    "vellum"
+    "vellum",
   }
 
   const enum MediaType {
@@ -2619,14 +2606,14 @@ declare module "ipp" {
     "tractor",
     "transparency",
     "triple-wall",
-    "wet-film"
+    "wet-film",
   }
 
   const enum MultipleDocumentHandling {
     "separate-documents-collated-copies",
     "separate-documents-uncollated-copies",
     "single-document",
-    "single-document-new-sheet"
+    "single-document-new-sheet",
   }
 
   const enum NotifyEvents {
@@ -2644,7 +2631,7 @@ declare module "ipp" {
     "printer-restarted",
     "printer-shutdown",
     "printer-state-changed",
-    "printer-stopped"
+    "printer-stopped",
   }
 
   const enum OutputBin {
@@ -2689,7 +2676,7 @@ declare module "ipp" {
     "tray-7",
     "tray-8",
     "tray-9",
-    "tray-10"
+    "tray-10",
   }
 
   const enum PageDelivery {
@@ -2697,12 +2684,12 @@ declare module "ipp" {
     "reverse-order-face-up",
     "same-order-face-down",
     "same-order-face-up",
-    "system-specified"
+    "system-specified",
   }
 
   const enum PageOrder {
     "1-to-n-order",
-    "n-to-1-order"
+    "n-to-1-order",
   }
 
   const enum PresentationDirectionNumberUp {
@@ -2713,7 +2700,7 @@ declare module "ipp" {
     "toright-tobottom",
     "toright-totop",
     "totop-toleft",
-    "totop-toright"
+    "totop-toright",
   }
 
   const enum PrintColorMode {
@@ -2723,7 +2710,7 @@ declare module "ipp" {
     "highlight",
     "monochrome",
     "process-bi-level",
-    "process-monochrome"
+    "process-monochrome",
   }
 
   const enum PrintContentOptimize {
@@ -2731,7 +2718,7 @@ declare module "ipp" {
     "graphic",
     "photo",
     "text",
-    "text-and-graphic"
+    "text-and-graphic",
   }
 
   const enum PrintRenderingIntent {
@@ -2740,7 +2727,7 @@ declare module "ipp" {
     "perceptual",
     "relative",
     "relative-bpc",
-    "saturation"
+    "saturation",
   }
 
   const enum PrinterStateReasons {
@@ -3466,7 +3453,7 @@ declare module "ipp" {
     "wrapper-under-temperature",
     "wrapper-unrecoverable-failure",
     "wrapper-unrecoverable-storage-error",
-    "wrapper-warming-up"
+    "wrapper-warming-up",
   }
 
   const enum PwgRasterDocumentTypeSupported {
@@ -3513,7 +3500,7 @@ declare module "ipp" {
     "sgray_8",
     "sgray_16",
     "srgb_8",
-    "srgb_16"
+    "srgb_16",
   }
 
   const enum PrintQuality {
@@ -3537,7 +3524,7 @@ declare module "ipp" {
   const enum SaveDisposition {
     "none",
     "print-save",
-    "save-only"
+    "save-only",
   }
 
   const enum SeparatorSheetsType {
@@ -3545,20 +3532,20 @@ declare module "ipp" {
     "end-sheet",
     "none",
     "slip-sheets",
-    "start-sheet"
+    "start-sheet",
   }
 
   const enum Sides {
     "one-sided",
     "two-sided-long-edge",
-    "two-sided-short-edge"
+    "two-sided-short-edge",
   }
 
   const enum StitchingReferenceEdge {
     "bottom",
     "left",
     "right",
-    "top"
+    "top",
   }
 
   const enum WhichJobs {
@@ -3572,21 +3559,21 @@ declare module "ipp" {
     "processing",
     "processing-stopped",
     "proof-print",
-    "saved"
+    "saved",
   }
 
   const enum XImagePosition {
     "center",
     "left",
     "none",
-    "right"
+    "right",
   }
 
   const enum YImagePosition {
     "bottom",
     "center",
     "none",
-    "top"
+    "top",
   }
 
   const enum CharacterSet {
@@ -3996,7 +3983,7 @@ declare module "ipp" {
     "tv",
     "udp",
     "unreal",
-    "urn",	
+    "urn",
     "ut2004",
     "v-event",
     "vemmi",
@@ -4151,13 +4138,13 @@ declare module "ipp" {
   const enum AccuracyUnits {
     "mm",
     "nm",
-    "um"
+    "um",
   }
 
   const enum BalingType {
     "band",
     "shrink-wrap",
-    "wrap"
+    "wrap",
   }
 
   const enum BalingWhen {
@@ -4170,13 +4157,12 @@ declare module "ipp" {
     "certificate",
     "digest",
     "none",
-    "requesting-user-name"
+    "requesting-user-name",
   }
 
   const enum XriSecurity {
     "none",
     "ssl3",
-    "tls"
+    "tls",
   }
-  
 }
