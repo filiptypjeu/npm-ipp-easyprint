@@ -3,6 +3,7 @@
     "rules": {
         "no-empty": false,
         "no-console": false,
+        "object-literal-sort-keys": false,
         "variable-name": {
             "options": [
                 "allow-leading-underscore",

@@ -2,7 +2,39 @@ declare module "ipp" {
   export class Printer {
     constructor(url: string, options?: IPrinterOptions);
 
-    execute: (operation: PrinterOpertaion, message?: any, callback?: (error: Error, response: any) => void) => void;
+    execute(operation: PrinterOpertaion, message?: IFullRequest, callback?: (error: Error, response: IFullResponse) => void): void;
+    execute(operation: "Print-Job", message: IPrintJobRequest, callback?: (error: Error, response: IPrintJobResponse) => void): void;
+    execute(operation: "Print-URI", message: IPrintURIRequest, callback?: (error: Error, response: IPrintJobResponse) => void): void;
+    execute(operation: "Validate-Job", message: IValidateJobRequest, callback?: (error: Error, response: ISimpleResponse) => void): void;
+    execute(operation: "Create-Job", message: ICreateJobRequest, callback?: (error: Error, response: ISimpleResponse) => void): void;
+    execute(
+      operation: "Get-Printer-Attributes",
+      message: IGetPrinterAttributesRequest,
+      callback?: (error: Error, response: IGetPrinterAttributesResponse) => void
+    ): void;
+    execute(operation: "Get-Jobs", message: IGetJobsRequest, callback?: (error: Error, response: IGetJobsResponse) => void): void;
+    execute(operation: "Pause-Printer", message: ISimpleRequest, callback?: (error: Error, response: ISimpleResponse) => void): void;
+    execute(operation: "Resume-Printer", message: ISimpleRequest, callback?: (error: Error, response: ISimpleResponse) => void): void;
+    execute(operation: "Purge-Jobs", message: ISimpleRequest, callback?: (error: Error, response: ISimpleResponse) => void): void;
+    execute(
+      operation: "Send-Document",
+      message: ISendDocumentRequest,
+      callback?: (error: Error, response: ISendDocumentResponse) => void
+    ): void;
+    execute(operation: "Send-URI", message: ISendURIRequest, callback?: (error: Error, response: ISimpleResponse) => void): void;
+    execute(operation: "Cancel-Job", message: ICancelReleaseJobRequest, callback?: (error: Error, response: ISimpleResponse) => void): void;
+    execute(
+      operation: "Release-Job",
+      message: ICancelReleaseJobRequest,
+      callback?: (error: Error, response: ISimpleResponse) => void
+    ): void;
+    execute(
+      operation: "Get-Job-Attributes",
+      message: IGetJobAttributesRequest,
+      callback?: (error: Error, response: IGetJobAttributesResponse) => void
+    ): void;
+    execute(operation: "Hold-Job", message: IHoldRestartJobRequest, callback?: (error: Error, response: ISimpleResponse) => void): void;
+    execute(operation: "Restart-Job", message: IHoldRestartJobRequest, callback?: (error: Error, response: ISimpleResponse) => void): void;
   }
 
   export interface IPrinterOptions {
@@ -12,7 +44,30 @@ declare module "ipp" {
     language?: string;
   }
 
-  // PAUSE-/RESUME-PRINTER and PURGEJOBS
+  interface IFullRequest {
+    "operation-attributes-tag"?: IOperationAttributes;
+    "job-attributes-tag"?: IJobTemplateAttributes;
+    data: Buffer;
+  }
+
+  interface IFullResponse {
+    version: IPPVersion;
+    statusCode: StatusCode;
+    id: number;
+    "operation-attributes-tag": IOperationAttributes;
+    "unsupported-attributes"?: string[];
+    "job-attributes-tag"?: any;
+    "printer-attributes-tag"?: IPrinterDescription;
+  }
+
+  interface ISimpleRequest {
+    "operation-attributes-tag": {
+      "requesting-user-name": string;
+      "attributes-charset"?: CharacterSet;
+      "attributes-natural-language"?: string;
+      "printer-uri"?: string;
+    };
+  }
 
   interface ISimpleResponse {
     version: IPPVersion;
@@ -21,38 +76,29 @@ declare module "ipp" {
     "operation-attributes-tag": {
       "attributes-charset": CharacterSet;
       "attributes-natural-language": string;
-      "status-message"?: string;
       "detailed-status-message"?: string;
+      "status-message"?: string;
     };
     "unsupported-attributes"?: string[];
-  }
-
-  interface ISimpleRequest {
-    "operation-attributes-tag": {
-      "attributes-charset": CharacterSet;
-      "attributes-natural-language": string;
-      "requesting-user-name": string;
-      "printer-uri": string;
-    };
   }
 
   // PRINT-JOB
 
   interface IPrintJobRequest {
     "operation-attributes-tag": {
-      "attributes-charset": CharacterSet;
       "requesting-user-name": string;
-      "attributes-natural-language": string;
+      "attributes-charset"?: CharacterSet;
+      "attributes-natural-language"?: string;
+      compression?: Compression;
       "document-format"?: MimeMediaType;
-      "printer-uri": string;
-      "job-name"?: string;
-      "ipp-attribute-fidelity"?: boolean;
       "document-name"?: string;
       "document-natural-language"?: string;
-      compression?: Compression;
-      "job-k-octets"?: number;
+      "ipp-attribute-fidelity"?: boolean;
       "job-impressions"?: number;
+      "job-k-octets"?: number;
       "job-media-sheets"?: number;
+      "job-name"?: string;
+      "printer-uri"?: string;
     };
     "job-attributes-tag"?: IJobTemplateAttributes;
     data: Buffer;
@@ -65,29 +111,30 @@ declare module "ipp" {
     "operation-attributes-tag": {
       "attributes-charset": CharacterSet;
       "attributes-natural-language": string;
-      "status-message"?: string;
       "detailed-status-message"?: string;
+      "status-message"?: string;
     };
     "unsupported-attributes"?: string[];
     "job-attributes-tag": {
       "job-id": number;
-      "job-uri": string;
       "job-state": JobState;
       "job-state-reasons": JobStateReasons[];
+      "job-uri": string;
       "job-state-message"?: string;
       "number-of-intervening-jobs"?: number;
     };
   }
 
   // PRINT-URI
+  // Same response as PRINT-JOB
 
   interface IPrintURIRequest {
     "operation-attributes-tag": {
-      "attributes-charset": CharacterSet;
+      "attributes-charset"?: CharacterSet;
       "requesting-user-name": string;
-      "attributes-natural-language": string;
+      "attributes-natural-language"?: string;
       "document-format"?: MimeMediaType;
-      "printer-uri": string;
+      "printer-uri"?: string;
       "job-name"?: string;
       "ipp-attribute-fidelity"?: boolean;
       "document-name"?: string;
@@ -105,11 +152,11 @@ declare module "ipp" {
 
   interface IValidateJobRequest {
     "operation-attributes-tag": {
-      "attributes-charset": CharacterSet;
+      "attributes-charset"?: CharacterSet;
       "requesting-user-name": string;
-      "attributes-natural-language": string;
+      "attributes-natural-language"?: string;
       "document-format"?: MimeMediaType;
-      "printer-uri": string;
+      "printer-uri"?: string;
       "job-name"?: string;
       "ipp-attribute-fidelity"?: boolean;
       "document-name"?: string;
@@ -126,10 +173,10 @@ declare module "ipp" {
 
   interface ICreateJobRequest {
     "operation-attributes-tag": {
-      "attributes-charset": CharacterSet;
+      "attributes-charset"?: CharacterSet;
       "requesting-user-name": string;
-      "attributes-natural-language": string;
-      "printer-uri": string;
+      "attributes-natural-language"?: string;
+      "printer-uri"?: string;
       "job-name"?: string;
       "ipp-attribute-fidelity"?: boolean;
       "job-k-octets"?: number;
@@ -143,12 +190,12 @@ declare module "ipp" {
 
   interface IGetPrinterAttributesRequest {
     "operation-attributes-tag": {
-      "attributes-charset": CharacterSet;
+      "attributes-charset"?: CharacterSet;
       "requesting-user-name": string;
-      "attributes-natural-language": string;
+      "attributes-natural-language"?: string;
       "document-format"?: MimeMediaType;
       "requested-attributes"?: (RequestedPrinterAttributeGroups | keyof IPrinterDescription)[];
-      "printer-uri": string;
+      "printer-uri"?: string;
     };
   }
 
@@ -159,25 +206,25 @@ declare module "ipp" {
     "operation-attributes-tag": {
       "attributes-charset": CharacterSet;
       "attributes-natural-language": string;
-      "status-message"?: string;
       "detailed-status-message"?: string;
+      "status-message"?: string;
     };
     "unsupported-attributes"?: string[];
-    "printer-attributes-tag": IPrinterDescription;
+    "printer-attributes-tag": any;
   }
 
   // GET-JOBS
 
   interface IGetJobsRequest {
     "operation-attributes-tag": {
-      "attributes-charset": CharacterSet;
-      "attributes-natural-language": string;
+      "attributes-charset"?: CharacterSet;
+      "attributes-natural-language"?: string;
       "requesting-user-name": string;
       limit?: number;
       "requested-attributes"?: (RequestedJobAttributeGroups | keyof IJobTemplateAttributes | keyof IJobStatusAttributes)[];
       "which-jobs"?: WhichJobs;
       "my-jobs"?: boolean;
-      "printer-uri": string;
+      "printer-uri"?: string;
     };
   }
 
@@ -188,8 +235,8 @@ declare module "ipp" {
     "operation-attributes-tag": {
       "attributes-charset": CharacterSet;
       "attributes-natural-language": string;
-      "status-message"?: string;
       "detailed-status-message"?: string;
+      "status-message"?: string;
     };
     "unsupported-attributes"?: string[];
     "job-attributes-tag"?: IJobTemplateAttributes | IJobTemplateAttributes[];
@@ -199,9 +246,9 @@ declare module "ipp" {
 
   interface ISendDocumentRequest {
     "operation-attributes-tag": {
-      "attributes-charset": CharacterSet;
-      "attributes-natural-language": string;
-      "printer-uri?": string;
+      "attributes-charset"?: CharacterSet;
+      "attributes-natural-language"?: string;
+      "printer-uri"?: string;
       "job-id"?: number;
       "job-uri"?: string;
       "requesting-user-name": string;
@@ -221,8 +268,8 @@ declare module "ipp" {
     "operation-attributes-tag": {
       "attributes-charset": CharacterSet;
       "attributes-natural-language": string;
-      "status-message"?: string;
       "detailed-status-message"?: string;
+      "status-message"?: string;
     };
     "unsupported-attributes"?: string[];
     "job-attributes-tag": {
@@ -239,9 +286,9 @@ declare module "ipp" {
 
   interface ISendURIRequest {
     "operation-attributes-tag": {
-      "attributes-charset": CharacterSet;
-      "attributes-natural-language": string;
-      "printer-uri?": string;
+      "attributes-charset"?: CharacterSet;
+      "attributes-natural-language"?: string;
+      "printer-uri"?: string;
       "job-id"?: number;
       "job-uri"?: string;
       "requesting-user-name": string;
@@ -258,9 +305,9 @@ declare module "ipp" {
 
   interface ICancelReleaseJobRequest {
     "operation-attributes-tag": {
-      "attributes-charset": CharacterSet;
-      "attributes-natural-language": string;
-      "printer-uri?": string;
+      "attributes-charset"?: CharacterSet;
+      "attributes-natural-language"?: string;
+      "printer-uri"?: string;
       "job-id"?: number;
       "job-uri"?: string;
       "requesting-user-name": string;
@@ -272,9 +319,9 @@ declare module "ipp" {
 
   interface IGetJobAttributesRequest {
     "operation-attributes-tag": {
-      "attributes-charset": CharacterSet;
-      "attributes-natural-language": string;
-      "printer-uri?": string;
+      "attributes-charset"?: CharacterSet;
+      "attributes-natural-language"?: string;
+      "printer-uri"?: string;
       "job-id"?: number;
       "job-uri"?: string;
       "requested-attributes"?: (RequestedJobAttributeGroups | keyof IJobTemplateAttributes | keyof IJobStatusAttributes)[];
@@ -288,8 +335,8 @@ declare module "ipp" {
     "operation-attributes-tag": {
       "attributes-charset": CharacterSet;
       "attributes-natural-language": string;
-      "status-message"?: string;
       "detailed-status-message"?: string;
+      "status-message"?: string;
     };
     "unsupported-attributes"?: string[];
     "job-attributes-tag": IJobTemplateAttributes;
@@ -299,9 +346,9 @@ declare module "ipp" {
 
   interface IHoldRestartJobRequest {
     "operation-attributes-tag": {
-      "attributes-charset": CharacterSet;
-      "attributes-natural-language": string;
-      "printer-uri?": string;
+      "attributes-charset"?: CharacterSet;
+      "attributes-natural-language"?: string;
+      "printer-uri"?: string;
       "job-id"?: number;
       "job-uri"?: string;
       "requesting-user-name": string;
@@ -488,7 +535,7 @@ declare module "ipp" {
     "page-order-received"?: PageOrder;
     "page-ranges": string;
     "pages-per-subset"?: number[];
-    "pclm-source-resolution"?: string;
+    "pclm-source-resolution"?: Resolution;
     "pdl-init-file"?: IPdlInitFile;
     "platform-temperature"?: number;
     "presentation-direction-number-up"?: PresentationDirectionNumberUp;
@@ -501,7 +548,7 @@ declare module "ipp" {
     "print-rendering-intent"?: PrintRenderingIntent;
     "print-scaling"?: PrintScaling;
     "print-supports"?: PrintSupports;
-    "printer-resolution"?: string;
+    "printer-resolution"?: Resolution;
     "proof-print"?: IProofPrint;
     "retry-interval"?: number;
     "retry-time-out"?: number;
@@ -619,7 +666,7 @@ declare module "ipp" {
     "print-quality-actual"?: PrintQuality[];
     "print-rendering-intent-actual"?: PrintRenderingIntent[];
     "print-supports-actual"?: PrintSupports[];
-    "printer-resolution-actual"?: string[];
+    "printer-resolution-actual"?: Resolution[];
     "separator-sheets-actual"?: ISeparatorSheets[];
     "sheet-collate-actual"?: ("collated" | "uncollated")[];
     "sides-actual"?: Sides[];
@@ -716,7 +763,7 @@ declare module "ipp" {
     "input-media-supported"?: (MediaName | MediaSizeName)[];
     "input-orientation-requested-supported"?: OrientationRequested[];
     "input-quality-supported"?: PrintQuality[];
-    "input-resolution-supported"?: string[];
+    "input-resolution-supported"?: Resolution[];
     "input-scan-regions-supported"?: IInputScanRegion;
     "input-sides-supported"?: Sides[];
     "input-source-supported"?: InputSource[];
@@ -905,7 +952,7 @@ declare module "ipp" {
     "pages-per-subset-supported"?: boolean;
     "parent-printers-supported"?: string[];
     "pclm-raster-back-side"?: "flipped" | "normal" | "rotated";
-    "pclm-source-resolution-supported"?: string[];
+    "pclm-source-resolution-supported"?: Resolution[];
     "pclm-strip-height-preferred"?: number[];
     "pclm-strip-height-supported"?: number;
     "pdf-features-supported"?: ("prc" | "u3d")[];
@@ -965,7 +1012,7 @@ declare module "ipp" {
     "printer-contact-col"?: IPrinterContact;
     "printer-current-time"?: string;
     "printer-device-id"?: string;
-    "printer-dns-sd-name?": string;
+    "printer-dns-sd-name"?: string;
     "printer-driver-installer"?: string;
     "printer-fax-log-uri"?: string;
     "printer-fax-modem-info"?: string[];
@@ -985,8 +1032,8 @@ declare module "ipp" {
     "printer-organization"?: string[];
     "printer-organizational-unit"?: string[];
     "printer-privacy-policy-uri"?: string;
-    "printer-resolution-default"?: string;
-    "printer-resolution-supported"?: string;
+    "printer-resolution-default"?: Resolution;
+    "printer-resolution-supported"?: Resolution;
     "printer-static-resource-directory-uri"?: string;
     "printer-static-resource-k-octets-supported"?: number;
     "printer-strings-languages-supported"?: string[];
@@ -999,7 +1046,7 @@ declare module "ipp" {
     "punching-locations-supported"?: (number | string)[];
     "punching-offset-supported"?: (number | string)[];
     "punching-reference-edge-supported"?: ReferenceEdge[];
-    "pwg-raster-document-resolution-supported"?: string[];
+    "pwg-raster-document-resolution-supported"?: Resolution[];
     "pwg-raster-document-sheet-back"?: "flipped" | "manual-tumble" | "normal" | "rotated";
     "pwg-raster-document-type-supported"?: PwgRasterDocumentTypeSupported[];
     "pwg-safe-gcode-supported"?: string[];
@@ -1156,7 +1203,7 @@ declare module "ipp" {
     "input-media"?: MediaName | MediaSizeName;
     "input-orientation-requested"?: OrientationRequested;
     "input-quality"?: PrintQuality;
-    "input-resolution"?: string;
+    "input-resolution"?: Resolution;
     "input-scaling-height"?: number;
     "input-scaling-width"?: number;
     "input-scan-regions"?: IPPScanRegions[];
@@ -2745,7 +2792,15 @@ declare module "ipp" {
     | "totop-toleft"
     | "totop-toright";
 
-  type PrintColorMode = "auto" | "bi-level" | "color" | "highlight" | "monochrome" | "process-bi-level" | "process-monochrome";
+  type PrintColorMode =
+    | "auto"
+    | "auto-monochrome"
+    | "bi-level"
+    | "color"
+    | "highlight"
+    | "monochrome"
+    | "process-bi-level"
+    | "process-monochrome";
 
   type PrintContentOptimize = "auto" | "graphic" | "photo" | "text" | "text-and-graphic";
 
@@ -4036,304 +4091,305 @@ declare module "ipp" {
     | "reset-init"
     | "not-applicable"
     | "no-change";
+
+  type DocumentState = "pending" | "processing" | "processing-stopped" | "canceled" | "aborted" | "completed";
+
+  type JobState = "pending" | "pending-held" | "processing" | "processing-stopped" | "canceled" | "aborted" | "completed";
+
+  type ResourceState = "pending" | "available" | "installed" | "canceled" | "aborted";
+
+  type TransmissionStatus = "pending" | "pending-retry" | "processing" | "canceled" | "aborted" | "completed";
+
+  type OrientationRequested = "portrait" | "landscape" | "reverse-landscape" | "reverse-portrait" | "none";
+
+  type AccuracyUnits = "mm" | "nm" | "um";
+
+  type BalingType = "band" | "shrink-wrap" | "wrap";
+
+  type BalingWhen = "after-job" | "after-sets";
+
+  type XriAuthentication = "basic" | "certificate" | "digest" | "none" | "requesting-user-name";
+
+  type XriSecurity = "none" | "ssl3" | "tls";
+
+  type TrimmingType = "draw-line" | "full" | "partial" | "perforate" | "score" | "tab";
+
+  type ReferenceEdge = "bottom" | "left" | "right" | "top";
+
+  type StitchingMethod = "auto" | "crimp" | "wire";
+
+  type TimeoutPredicate = "activity" | "inactivity" | "none";
+
+  type SystemTimeoutSource = "dhcp" | "ntp" | "onboard" | "sntp";
+
+  type ResourceType =
+    | "executable-firmware"
+    | "executable-software"
+    | "static-font"
+    | "static-form"
+    | "static-icc-profile"
+    | "static-image"
+    | "static-logo"
+    | "static-other"
+    | "static-strings"
+    | "template-document"
+    | "template-job"
+    | "template-printer";
+
+  type PrintSupports = "material" | "none" | "standard";
+
+  type PrintScaling = "auto" | "auto-fit" | "fill" | "fit" | "none";
+
+  type PrintBase = "brim" | "none" | "raft" | "skirt" | "standard";
+
+  type MaterialType =
+    | "abs"
+    | "abs-carbon-fiber"
+    | "abs-carbon-nanotube"
+    | "chocolate"
+    | "gold"
+    | "nylon"
+    | "pet"
+    | "photopolymer"
+    | "pla"
+    | "pla-conductive"
+    | "pla-dissolvable"
+    | "pla-flexible"
+    | "pla-magnetic"
+    | "pla-steel"
+    | "pla-stone"
+    | "pla-wood"
+    | "polycarbonate"
+    | "pva-dissolvable"
+    | "silver"
+    | "titanium"
+    | "wax";
+
+  type MaterialRateUnits = "mg_second" | "ml_second" | "mm_second";
+
+  type MaterialPurpose = "all" | "base" | "in-fill" | "shell" | "support";
+
+  type MaterialAmountUnits = "g" | "kg" | "l" | "m" | "ml" | "mm";
+
+  type LaminatingType = "archival" | "glossy" | "high-gloss" | "matte" | "semi-gloss" | "translucent";
+
+  type FinishingSides = "back" | "both" | "front";
+
+  type JobRetainUntil = "end-of-day" | "end-of-month" | "end-of-week" | "indefinite" | "none";
+
+  type JobPasswordRepertoire =
+    | "iana_us-ascii_any"
+    | "iana_us-ascii_complex"
+    | "iana_us-ascii_digits"
+    | "iana_us-ascii_letters"
+    | "iana_utf-8_any"
+    | "iana_utf-8_digits"
+    | "iana_utf-8_letters";
+
+  type InputSource = "adf" | "film-reader" | "platen";
+
+  type InputFilmScanMode = "black-and-white-negative-film" | "color-negative-film" | "color-slide-film" | "not-applicable";
+
+  type InputContentType = "auto" | "halftone" | "line-art" | "magazine" | "photo" | "text" | "text-and-photo";
+
+  type InputColorMode =
+    | "auto"
+    | "bi-level"
+    | "cmyk_8"
+    | "cmyk_16"
+    | "color"
+    | "color_8"
+    | "monochrome"
+    | "monochrome_4"
+    | "monochrome_8"
+    | "monochrome_16"
+    | "rgb_16"
+    | "rgba_8"
+    | "rgba_16";
+
+  type FoldingDirection = "inward" | "outward";
+
+  type Finishings =
+    | "bale"
+    | "bind"
+    | "bind-bottom"
+    | "bind-left"
+    | "bind-right"
+    | "bind-top"
+    | "booklet-maker"
+    | "coat"
+    | "cover"
+    | "edge-stitch"
+    | "edge-stitch-bottom"
+    | "edge-stitch-left"
+    | "edge-stitch-right"
+    | "edge-stitch-top"
+    | "fold"
+    | "fold-accordion"
+    | "fold-double-gate"
+    | "fold-engineering-z"
+    | "fold-gate"
+    | "fold-half"
+    | "fold-half-z"
+    | "fold-left-gate"
+    | "fold-letter"
+    | "fold-parallel"
+    | "fold-poster"
+    | "fold-right-gate"
+    | "fold-z"
+    | "jdf-f2-1"
+    | "jdf-f4-1"
+    | "jdf-f4-2"
+    | "jdf-f6-1"
+    | "jdf-f6-2"
+    | "jdf-f6-3"
+    | "jdf-f6-4"
+    | "jdf-f6-5"
+    | "jdf-f6-6"
+    | "jdf-f6-7"
+    | "jdf-f6-8"
+    | "jdf-f8-1"
+    | "jdf-f8-2"
+    | "jdf-f8-3"
+    | "jdf-f8-4"
+    | "jdf-f8-5"
+    | "jdf-f8-6"
+    | "jdf-f8-7"
+    | "jdf-f10-1"
+    | "jdf-f10-2"
+    | "jdf-f10-3"
+    | "jdf-f12-1"
+    | "jdf-f12-2"
+    | "jdf-f12-3"
+    | "jdf-f12-4"
+    | "jdf-f12-5"
+    | "jdf-f12-6"
+    | "jdf-f12-7"
+    | "jdf-f12-8"
+    | "jdf-f12-9"
+    | "jdf-f12-10"
+    | "jdf-f12-11"
+    | "jdf-f12-12"
+    | "jdf-f12-13"
+    | "jdf-f12-14"
+    | "jdf-f14-1"
+    | "jdf-f16-1"
+    | "jdf-f16-2"
+    | "jdf-f16-3"
+    | "jdf-f16-4"
+    | "jdf-f16-5"
+    | "jdf-f16-6"
+    | "jdf-f16-7"
+    | "jdf-f16-8"
+    | "jdf-f16-9"
+    | "jdf-f16-10"
+    | "jdf-f16-11"
+    | "jdf-f16-12"
+    | "jdf-f16-13"
+    | "jdf-f16-14"
+    | "jdf-f18-1"
+    | "jdf-f18-2"
+    | "jdf-f18-3"
+    | "jdf-f18-4"
+    | "jdf-f18-5"
+    | "jdf-f18-6"
+    | "jdf-f18-7"
+    | "jdf-f18-8"
+    | "jdf-f18-9"
+    | "jdf-f20-1"
+    | "jdf-f20-2"
+    | "jdf-f24-1"
+    | "jdf-f24-2"
+    | "jdf-f24-3"
+    | "jdf-f24-4"
+    | "jdf-f24-5"
+    | "jdf-f24-6"
+    | "jdf-f24-7"
+    | "jdf-f24-8"
+    | "jdf-f24-9"
+    | "jdf-f24-10"
+    | "jdf-f24-11"
+    | "jdf-f28-1"
+    | "jdf-f32-1"
+    | "jdf-f32-2"
+    | "jdf-f32-3"
+    | "jdf-f32-4"
+    | "jdf-f32-5"
+    | "jdf-f32-6"
+    | "jdf-f32-7"
+    | "jdf-f32-8"
+    | "jdf-f32-9"
+    | "jdf-f36-1"
+    | "jdf-f36-2"
+    | "jdf-f40-1"
+    | "jdf-f48-1"
+    | "jdf-f48-2"
+    | "jdf-f64-1"
+    | "jdf-f64-2"
+    | "jog-offset"
+    | "laminate"
+    | "punch"
+    | "punch-bottom-left"
+    | "punch-bottom-right"
+    | "punch-dual-bottom"
+    | "punch-dual-left"
+    | "punch-dual-right"
+    | "punch-dual-top"
+    | "punch-multiple-bottom"
+    | "punch-multiple-left"
+    | "punch-multiple-right"
+    | "punch-multiple-top"
+    | "punch-quad-bottom"
+    | "punch-quad-left"
+    | "punch-quad-right"
+    | "punch-quad-top"
+    | "punch-top-left"
+    | "punch-top-right"
+    | "punch-triple-bottom"
+    | "punch-triple-left"
+    | "punch-triple-right"
+    | "punch-triple-top"
+    | "saddle-stitch"
+    | "staple"
+    | "staple-bottom-left"
+    | "staple-bottom-right"
+    | "staple-dual-bottom"
+    | "staple-dual-left"
+    | "staple-dual-right"
+    | "staple-dual-top"
+    | "staple-top-left"
+    | "staple-top-right"
+    | "staple-triple-bottom"
+    | "staple-triple-left"
+    | "staple-triple-right"
+    | "staple-triple-top"
+    | "trim"
+    | "trim-after-copies"
+    | "trim-after-documents"
+    | "trim-after-job"
+    | "trim-after-pages";
+
+  type BindingType = "adhesive" | "comb" | "flat" | "padding" | "perfect" | "spiral" | "tape" | "velo";
+
+  type CoatingType =
+    | "archival"
+    | "archival-glossy"
+    | "archival-matte"
+    | "archival-semi-gloss"
+    | "glossy"
+    | "high-gloss"
+    | "matte"
+    | "semi-gloss"
+    | "silicone"
+    | "translucent";
+
+  type IPPVersion = "1.0" | "1.1" | "2.0" | "2.1" | "2.2";
+
+  type JobAccountType = "general" | "group" | "none";
+
+  type MultipleObjectHandling = "auto" | "best-fit" | "best-quality" | "best-speed" | "one-at-a-time";
+
+  type Overrides = keyof IJobTemplateAttributes | "document-copies" | "document-numbers" | "pages";
+
+  type Resolution = [number, number, string];
 }
-
-type DocumentState = "pending" | "processing" | "processing-stopped" | "canceled" | "aborted" | "completed";
-
-type JobState = "pending" | "pending-held" | "processing" | "processing-stopped" | "canceled" | "aborted" | "completed";
-
-type ResourceState = "pending" | "available" | "installed" | "canceled" | "aborted";
-
-type TransmissionStatus = "pending" | "pending-retry" | "processing" | "canceled" | "aborted" | "completed";
-
-type OrientationRequested = "portrait" | "landscape" | "reverse-landscape" | "reverse-portrait" | "none";
-
-type AccuracyUnits = "mm" | "nm" | "um";
-
-type BalingType = "band" | "shrink-wrap" | "wrap";
-
-type BalingWhen = "after-job" | "after-sets";
-
-type XriAuthentication = "basic" | "certificate" | "digest" | "none" | "requesting-user-name";
-
-type XriSecurity = "none" | "ssl3" | "tls";
-
-type TrimmingType = "draw-line" | "full" | "partial" | "perforate" | "score" | "tab";
-
-type ReferenceEdge = "bottom" | "left" | "right" | "top";
-
-type StitchingMethod = "auto" | "crimp" | "wire";
-
-type TimeoutPredicate = "activity" | "inactivity" | "none";
-
-type SystemTimeoutSource = "dhcp" | "ntp" | "onboard" | "sntp";
-
-type ResourceType =
-  | "executable-firmware"
-  | "executable-software"
-  | "static-font"
-  | "static-form"
-  | "static-icc-profile"
-  | "static-image"
-  | "static-logo"
-  | "static-other"
-  | "static-strings"
-  | "template-document"
-  | "template-job"
-  | "template-printer";
-
-type PrintSupports = "material" | "none" | "standard";
-
-type PrintScaling = "auto" | "auto-fit" | "fill" | "fit" | "none";
-
-type PrintBase = "brim" | "none" | "raft" | "skirt" | "standard";
-
-type MaterialType =
-  | "abs"
-  | "abs-carbon-fiber"
-  | "abs-carbon-nanotube"
-  | "chocolate"
-  | "gold"
-  | "nylon"
-  | "pet"
-  | "photopolymer"
-  | "pla"
-  | "pla-conductive"
-  | "pla-dissolvable"
-  | "pla-flexible"
-  | "pla-magnetic"
-  | "pla-steel"
-  | "pla-stone"
-  | "pla-wood"
-  | "polycarbonate"
-  | "pva-dissolvable"
-  | "silver"
-  | "titanium"
-  | "wax";
-
-type MaterialRateUnits = "mg_second" | "ml_second" | "mm_second";
-
-type MaterialPurpose = "all" | "base" | "in-fill" | "shell" | "support";
-
-type MaterialAmountUnits = "g" | "kg" | "l" | "m" | "ml" | "mm";
-
-type LaminatingType = "archival" | "glossy" | "high-gloss" | "matte" | "semi-gloss" | "translucent";
-
-type FinishingSides = "back" | "both" | "front";
-
-type JobRetainUntil = "end-of-day" | "end-of-month" | "end-of-week" | "indefinite" | "none";
-
-type JobPasswordRepertoire =
-  | "iana_us-ascii_any"
-  | "iana_us-ascii_complex"
-  | "iana_us-ascii_digits"
-  | "iana_us-ascii_letters"
-  | "iana_utf-8_any"
-  | "iana_utf-8_digits"
-  | "iana_utf-8_letters";
-
-type InputSource = "adf" | "film-reader" | "platen";
-
-type InputFilmScanMode = "black-and-white-negative-film" | "color-negative-film" | "color-slide-film" | "not-applicable";
-
-type InputContentType = "auto" | "halftone" | "line-art" | "magazine" | "photo" | "text" | "text-and-photo";
-
-type InputColorMode =
-  | "auto"
-  | "bi-level"
-  | "cmyk_8"
-  | "cmyk_16"
-  | "color"
-  | "color_8"
-  | "monochrome"
-  | "monochrome_4"
-  | "monochrome_8"
-  | "monochrome_16"
-  | "rgb_16"
-  | "rgba_8"
-  | "rgba_16";
-
-type FoldingDirection = "inward" | "outward";
-
-type Finishings =
-  | "bale"
-  | "bind"
-  | "bind-bottom"
-  | "bind-left"
-  | "bind-right"
-  | "bind-top"
-  | "booklet-maker"
-  | "coat"
-  | "cover"
-  | "edge-stitch"
-  | "edge-stitch-bottom"
-  | "edge-stitch-left"
-  | "edge-stitch-right"
-  | "edge-stitch-top"
-  | "fold"
-  | "fold-accordion"
-  | "fold-double-gate"
-  | "fold-engineering-z"
-  | "fold-gate"
-  | "fold-half"
-  | "fold-half-z"
-  | "fold-left-gate"
-  | "fold-letter"
-  | "fold-parallel"
-  | "fold-poster"
-  | "fold-right-gate"
-  | "fold-z"
-  | "jdf-f2-1"
-  | "jdf-f4-1"
-  | "jdf-f4-2"
-  | "jdf-f6-1"
-  | "jdf-f6-2"
-  | "jdf-f6-3"
-  | "jdf-f6-4"
-  | "jdf-f6-5"
-  | "jdf-f6-6"
-  | "jdf-f6-7"
-  | "jdf-f6-8"
-  | "jdf-f8-1"
-  | "jdf-f8-2"
-  | "jdf-f8-3"
-  | "jdf-f8-4"
-  | "jdf-f8-5"
-  | "jdf-f8-6"
-  | "jdf-f8-7"
-  | "jdf-f10-1"
-  | "jdf-f10-2"
-  | "jdf-f10-3"
-  | "jdf-f12-1"
-  | "jdf-f12-2"
-  | "jdf-f12-3"
-  | "jdf-f12-4"
-  | "jdf-f12-5"
-  | "jdf-f12-6"
-  | "jdf-f12-7"
-  | "jdf-f12-8"
-  | "jdf-f12-9"
-  | "jdf-f12-10"
-  | "jdf-f12-11"
-  | "jdf-f12-12"
-  | "jdf-f12-13"
-  | "jdf-f12-14"
-  | "jdf-f14-1"
-  | "jdf-f16-1"
-  | "jdf-f16-2"
-  | "jdf-f16-3"
-  | "jdf-f16-4"
-  | "jdf-f16-5"
-  | "jdf-f16-6"
-  | "jdf-f16-7"
-  | "jdf-f16-8"
-  | "jdf-f16-9"
-  | "jdf-f16-10"
-  | "jdf-f16-11"
-  | "jdf-f16-12"
-  | "jdf-f16-13"
-  | "jdf-f16-14"
-  | "jdf-f18-1"
-  | "jdf-f18-2"
-  | "jdf-f18-3"
-  | "jdf-f18-4"
-  | "jdf-f18-5"
-  | "jdf-f18-6"
-  | "jdf-f18-7"
-  | "jdf-f18-8"
-  | "jdf-f18-9"
-  | "jdf-f20-1"
-  | "jdf-f20-2"
-  | "jdf-f24-1"
-  | "jdf-f24-2"
-  | "jdf-f24-3"
-  | "jdf-f24-4"
-  | "jdf-f24-5"
-  | "jdf-f24-6"
-  | "jdf-f24-7"
-  | "jdf-f24-8"
-  | "jdf-f24-9"
-  | "jdf-f24-10"
-  | "jdf-f24-11"
-  | "jdf-f28-1"
-  | "jdf-f32-1"
-  | "jdf-f32-2"
-  | "jdf-f32-3"
-  | "jdf-f32-4"
-  | "jdf-f32-5"
-  | "jdf-f32-6"
-  | "jdf-f32-7"
-  | "jdf-f32-8"
-  | "jdf-f32-9"
-  | "jdf-f36-1"
-  | "jdf-f36-2"
-  | "jdf-f40-1"
-  | "jdf-f48-1"
-  | "jdf-f48-2"
-  | "jdf-f64-1"
-  | "jdf-f64-2"
-  | "jog-offset"
-  | "jog-offset(deprecated)"
-  | "laminate"
-  | "punch"
-  | "punch-bottom-left"
-  | "punch-bottom-right"
-  | "punch-dual-bottom"
-  | "punch-dual-left"
-  | "punch-dual-right"
-  | "punch-dual-top"
-  | "punch-multiple-bottom"
-  | "punch-multiple-left"
-  | "punch-multiple-right"
-  | "punch-multiple-top"
-  | "punch-quad-bottom"
-  | "punch-quad-left"
-  | "punch-quad-right"
-  | "punch-quad-top"
-  | "punch-top-left"
-  | "punch-top-right"
-  | "punch-triple-bottom"
-  | "punch-triple-left"
-  | "punch-triple-right"
-  | "punch-triple-top"
-  | "saddle-stitch"
-  | "staple"
-  | "staple-bottom-left"
-  | "staple-bottom-right"
-  | "staple-dual-bottom"
-  | "staple-dual-left"
-  | "staple-dual-right"
-  | "staple-dual-top"
-  | "staple-top-left"
-  | "staple-top-right"
-  | "staple-triple-bottom"
-  | "staple-triple-left"
-  | "staple-triple-right"
-  | "staple-triple-top"
-  | "trim"
-  | "trim-after-copies"
-  | "trim-after-documents"
-  | "trim-after-job"
-  | "trim-after-pages";
-
-type BindingType = "adhesive" | "comb" | "flat" | "padding" | "perfect" | "spiral" | "tape" | "velo";
-
-type CoatingType =
-  | "archival"
-  | "archival-glossy"
-  | "archival-matte"
-  | "archival-semi-gloss"
-  | "glossy"
-  | "high-gloss"
-  | "matte"
-  | "semi-gloss"
-  | "silicone"
-  | "translucent";
-
-type IPPVersion = "1.0" | "1.1" | "2.0" | "2.1" | "2.2";
-
-type JobAccountType = "general" | "group" | "none";
-
-type MultipleObjectHandling = "auto" | "best-fit" | "best-quality" | "best-speed" | "one-at-a-time";
-
-type Overrides = keyof IJobTemplateAttributes | "document-copies" | "document-numbers" | "pages";

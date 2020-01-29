@@ -21,22 +21,24 @@
     "author": "Filip Stenbacka",
     "license": "ISC",
     "devDependencies": {
-        "@types/node": "^13.5.0",
-        "nodemon": "^1.19.4",
-        "ts-node": "^8.6.2",
         "@types/jest": "^24.9.1",
-        "typescript": "^3.7.5",
-        "ts-jest": "^24.2.0",
-        "tslint": "^5.20.1",
+        "@types/node": "^13.5.0",
+        "@types/request-promise": "^4.1.45",
         "jest": "^24.9.0",
+        "nodemon": "^1.19.4",
+        "prettier": "^1.19.1",
+        "ts-jest": "^24.2.0",
+        "ts-node": "^8.6.2",
+        "tslint": "^5.20.1",
         "tslint-config-prettier": "^1.18.0",
-        "prettier": "^1.19.1"
+        "typescript": "^3.7.5"
     },
     "types": "dist/index.d.ts",
     "dependencies": {
         "fs": "0.0.1-security",
-        "ipp": "^2.0.1",
-        "pdfkit": "^0.11.0"
+        "ipp": "git+ssh://git@github.com/filiptypjeu/ipp.git#finishings",
+        "pdfkit": "^0.11.0",
+        "request-promise": "^4.2.5"
     },
     "repository": {
         "type": "git",
