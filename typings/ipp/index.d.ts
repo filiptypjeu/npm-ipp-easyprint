@@ -2,95 +2,20 @@ declare module "ipp" {
   export class Printer {
     constructor(url: string, options?: IPrinterOptions);
 
-    execute: (operation: PrinterOpertaion, message?: IRequest, callback?: (error: Error, response: IResponse) => void) => void;
+    execute: (operation: PrinterOpertaion, message?: any, callback?: (error: Error, response: any) => void) => void;
   }
 
   export interface IPrinterOptions {
-    version?: "1.0" | "1.1" | "2.0" | "2.1" | "2.2";
+    version?: IPPVersion;
     uri?: string;
     charset?: string;
     language?: string;
   }
 
-  export interface IRequest {
-    "operation-attributes-tag": IOperationAttributes;
-    "job-attributes-tag"?: IJobStatusAttributes;
-    data?: Buffer;
-  }
-
-  export interface IResponse {
-    version: "1.0" | "1.1" | "2.0" | "2.1" | "2.2";
-    statusCode: StatusCode;
-    id: number;
-    "operation-attributes-tag": IOperationAttributes;
-    "job-attributes-tag": IJobStatusAttributes | IJobStatusAttributes[];
-    "printer-attributes-tag": any;
-  }
-
-  interface IDestionationAccesses {
-    "access-oauth-token"?: string[];
-    "access-oauth-uri"?: string;
-    "access-password"?: string;
-    "access-pin"?: string;
-    "access-user-name"?: string;
-  }
-
-  interface IDocumentAccess {
-    "access-oauth-token"?: string[];
-    "access-oauth-uri"?: string;
-    "access-password"?: string;
-    "access-pin"?: string;
-    "access-user-name"?: string;
-  }
-
-  interface IDocumentFormatDetails {
-    "document-format"?: MimeMediaType;
-    "document-format-device-id"?: string;
-    "document-format-version"?: string;
-    "document-natural-language"?: string[];
-    "document-source-application-name"?: string;
-    "document-source-application-version"?: string;
-    "document-source-os-name"?: string;
-    "document-source-os-version"?: string;
-  }
-
-  interface IInputAttributes {
-    "input-auto-scaling"?: boolean;
-    "input-auto-skew-correction"?: boolean;
-    "input-brightness"?: number;
-    "input-color-mode"?: InputColorMode;
-    "input-content-type"?: InputContentType;
-    "input-contrast"?: number;
-    "input-film-scan-mode"?: InputFilmScanMode;
-    "input-images-to-transfer"?: number;
-    "input-media"?: MediaName | MediaSizeName;
-    "input-orientation-requested"?: OrientationRequested;
-    "input-quality"?: string;
-    "input-resolution"?: string;
-    "input-scaling-height"?: number;
-    "input-scaling-width"?: number;
-    "input-scan-regions"?: IPPScanRegions[];
-    "input-sharpness"?: number;
-    "input-sides"?: Sides;
-    "input-source"?: InputSource;
-  }
-
-  interface IPPScanRegions {
-    "x-dimension"?: number;
-    "x-origin"?: number;
-    "y-dimension"?: number;
-    "y-origin"?: number;
-  }
-
-  interface IOutputAttributes {
-    "noise-removal"?: number;
-    "output-compression-quality-factor"?: number;
-  }
-
   // PAUSE-/RESUME-PRINTER and PURGEJOBS
 
   interface ISimpleResponse {
-    version: "1.0" | "1.1" | "2.0" | "2.1" | "2.2";
+    version: IPPVersion;
     statusCode: StatusCode;
     id: number;
     "operation-attributes-tag": {
@@ -134,7 +59,7 @@ declare module "ipp" {
   }
 
   interface IPrintJobResponse {
-    version: "1.0" | "1.1" | "2.0" | "2.1" | "2.2";
+    version: IPPVersion;
     statusCode: StatusCode;
     id: number;
     "operation-attributes-tag": {
@@ -228,7 +153,7 @@ declare module "ipp" {
   }
 
   interface IGetPrinterAttributesResponse {
-    version: "1.0" | "1.1" | "2.0" | "2.1" | "2.2";
+    version: IPPVersion;
     statusCode: StatusCode;
     id: number;
     "operation-attributes-tag": {
@@ -257,7 +182,7 @@ declare module "ipp" {
   }
 
   interface IGetJobsResponse {
-    version: "1.0" | "1.1" | "2.0" | "2.1" | "2.2";
+    version: IPPVersion;
     statusCode: StatusCode;
     id: number;
     "operation-attributes-tag": {
@@ -290,7 +215,7 @@ declare module "ipp" {
   }
 
   interface ISendDocumentResponse {
-    version: "1.0" | "1.1" | "2.0" | "2.1" | "2.2";
+    version: IPPVersion;
     statusCode: StatusCode;
     id: number;
     "operation-attributes-tag": {
@@ -357,7 +282,7 @@ declare module "ipp" {
   }
 
   interface IGetJobAttributesResponse {
-    version: "1.0" | "1.1" | "2.0" | "2.1" | "2.2";
+    version: IPPVersion;
     statusCode: StatusCode;
     id: number;
     "operation-attributes-tag": {
@@ -460,7 +385,7 @@ declare module "ipp" {
     "printer-service-type"?: PrinterServiceType[];
     "printer-up-time"?: number;
     "printer-uri"?: string;
-    "printer-xri-requested"?: any[];
+    "printer-xri-requested"?: IPrinterXri[];
     "profile-uri-actual"?: string;
     "requested-attributes"?: (
       | RequestedJobAttributeGroups
@@ -512,7 +437,7 @@ declare module "ipp" {
     "cover-front"?: ICover;
     "cover-sheet-info"?: ICoverSheetInfo;
     "destination-uris"?: IDestinationUris[];
-    finishings?: string[];
+    finishings?: Finishings[];
     "finishings-col"?: IFinishings[];
     "font-name-requested"?: string;
     "font-size-requested"?: number;
@@ -520,7 +445,7 @@ declare module "ipp" {
     "imposition-template"?: ImpositionTemplate;
     "insert-sheet"?: IInsertSheet[];
     "job-account-id"?: string;
-    "job-account-type"?: string;
+    "job-account-type"?: JobAccountType;
     "job-accounting-sheets"?: IJobAccontingSheets;
     "job-accounting-user-id"?: string;
     "job-cancel-after"?: number;
@@ -531,7 +456,7 @@ declare module "ipp" {
     "job-delay-output-until-time"?: string;
     "job-error-action"?: JobErrorAction;
     "job-error-sheet"?: IJobErrorSheet;
-    "job-finishings"?: string[];
+    "job-finishings"?: Finishings[];
     "job-finishings-col"?: IFinishings;
     "job-hold-until"?: JobHoldUntil;
     "job-hold-until-time"?: string;
@@ -552,13 +477,13 @@ declare module "ipp" {
     "media-col"?: IMedia;
     "media-input-tray-check"?: MediaIntputTray;
     "multiple-document-handling"?: MultipleDocumentHandling;
-    "multiple-object-handling"?: string;
+    "multiple-object-handling"?: MultipleObjectHandling;
     "number-of-retries"?: number;
     "number-up"?: number;
     "orientation-requested"?: OrientationRequested;
-    "output-bin"?: string;
+    "output-bin"?: OutputBin;
     "output-device"?: string;
-    overrides?: any[];
+    overrides?: Overrides[];
     "page-delivery"?: PageDelivery;
     "page-order-received"?: PageOrder;
     "page-ranges": string;
@@ -615,14 +540,14 @@ declare module "ipp" {
     "document-name-supplied"?: string;
     "document-natural-language-supplied"?: string;
     "errors-count"?: number;
-    "finishings-actual"?: string[];
+    "finishings-actual"?: Finishings[];
     "finishings-col-actual"?: IFinishings[];
     "force-front-side-actual"?: number[][];
     "imposition-template-actual"?: ImpositionTemplate[];
     "input-attributes-actual"?: IInputAttributes;
     "insert-sheet-actual"?: IInsertSheet[];
     "job-account-id-actual"?: string[];
-    "job-account-type-actual"?: string;
+    "job-account-type-actual"?: JobAccountType;
     "job-accounting-sheets-actual"?: IJobAccontingSheets[];
     "job-accounting-user-id-actual"?: string[];
     "job-attribute-fidelity"?: boolean;
@@ -666,7 +591,7 @@ declare module "ipp" {
     "media-col-actual"?: IMedia[];
     "media-input-tray-check-actual"?: string[];
     "multiple-document-handling-actual"?: MultipleDocumentHandling[];
-    "multiple-object-handling-actual"?: string;
+    "multiple-object-handling-actual"?: MultipleObjectHandling;
     "number-of-documents"?: number;
     "number-of-intervening-jobs"?: number;
     "number-up-actual"?: number[];
@@ -678,9 +603,9 @@ declare module "ipp" {
     "output-device-assigned"?: string;
     "output-device-job-state"?: JobState;
     "output-device-job-state-message"?: string;
-    "output-device-job-state-reasons"?: string[];
+    "output-device-job-state-reasons"?: JobStateReasons[];
     "output-device-uuid-assigned"?: string;
-    "overrides-actual"?: any[];
+    "overrides-actual"?: Overrides[];
     "page-delivery-actual"?: PageDelivery[];
     "page-order-received-actual"?: PageOrder[];
     "page-ranges-actual"?: number[];
@@ -762,14 +687,14 @@ declare module "ipp" {
     "feed-orientation-default"?: FeedOrientation;
     "feed-orientation-supported"?: FeedOrientation[];
     "fetch-document-attributes-supported"?: string[];
-    "finishing-template-supported"?: FinishingTemplate[];
+    "finishing-template-supported"?: Finishings[];
     "finishings-col-database"?: IFinishings[];
     "finishings-col-default"?: IFinishings;
     "finishings-col-ready"?: IFinishings[];
-    "finishings-col-supported"?: string[];
-    "finishings-default"?: string[];
-    "finishings-ready"?: string[];
-    "finishings-supported"?: string[];
+    "finishings-col-supported"?: (keyof IFinishings)[];
+    "finishings-default"?: Finishings[];
+    "finishings-ready"?: Finishings[];
+    "finishings-supported"?: Finishings[];
     "folding-direction-supported"?: FoldingDirection[];
     "folding-offset-supported"?: (number | string)[];
     "folding-reference-edge-supported"?: ReferenceEdge[];
@@ -790,7 +715,7 @@ declare module "ipp" {
     "input-film-scan-mode-supported"?: InputFilmScanMode[];
     "input-media-supported"?: (MediaName | MediaSizeName)[];
     "input-orientation-requested-supported"?: OrientationRequested[];
-    "input-quality-supported"?: string[];
+    "input-quality-supported"?: PrintQuality[];
     "input-resolution-supported"?: string[];
     "input-scan-regions-supported"?: IInputScanRegion;
     "input-sides-supported"?: Sides[];
@@ -815,12 +740,12 @@ declare module "ipp" {
       | "subscription-object"
       | "system-object"
     )[];
-    "ipp-versions-supported"?: ("1.0" | "1.1" | "2.0" | "2.1" | "2.2")[];
+    "ipp-versions-supported"?: IPPVersion[];
     "ippget-event-life"?: number;
     "job-account-id-default"?: string;
     "job-account-id-supported"?: boolean;
-    "job-account-type-default"?: string;
-    "job-account-type-supported"?: string[];
+    "job-account-type-default"?: JobAccountType;
+    "job-account-type-supported"?: JobAccountType[];
     "job-accounting-sheets-default"?: IJobAccontingSheets;
     "job-accounting-sheets-supported"?: string[];
     "job-accounting-user-id-default"?: string;
@@ -943,8 +868,8 @@ declare module "ipp" {
     "multiple-document-handling-default"?: MultipleDocumentHandling;
     "multiple-document-handling-supported"?: MultipleDocumentHandling[];
     "multiple-document-jobs-supported"?: boolean;
-    "multiple-object-handling-default"?: string;
-    "multiple-object-handling-supported"?: string[];
+    "multiple-object-handling-default"?: MultipleObjectHandling;
+    "multiple-object-handling-supported"?: MultipleObjectHandling[];
     "multiple-operation-time-out"?: number;
     "multiple-operation-time-out-action"?: "abort-job" | "hold-job" | "process-job";
     "natural-language-configured"?: string;
@@ -954,7 +879,7 @@ declare module "ipp" {
     "notify-lease-duration-default"?: number;
     "notify-lease-duration-supported"?: (number | string)[];
     "notify-pull-method-supported"?: "ippget"[];
-    "notify-schemes-supported"?: any[];
+    "notify-schemes-supported"?: UriSchemes[];
     "number-of-retries-default"?: number;
     "number-of-retries-supported"?: string;
     "number-up-default"?: number;
@@ -971,7 +896,7 @@ declare module "ipp" {
     "output-bin-supported"?: OutputBin[];
     "output-device-supported"?: string[];
     "output-device-uuid-supported"?: string[];
-    "overrides-supported"?: string[];
+    "overrides-supported"?: Overrides[];
     "page-delivery-default"?: PageDelivery;
     "page-delivery-supported"?: PageDelivery[];
     "page-order-received-default"?: PageOrder;
@@ -1067,7 +992,7 @@ declare module "ipp" {
     "printer-strings-languages-supported"?: string[];
     "printer-strings-uri"?: string;
     "printer-volume-supported"?: IPrinterVolumeSupported;
-    "printer-xri-supported"?: IPrinterXriSupported[];
+    "printer-xri-supported"?: IPrinterXri[];
     "proof-print-default"?: IProofPrint;
     "proof-print-supported"?: ("media" | "media-col" | "proof-print-copies")[];
     "punching-hole-diameter-configured"?: number;
@@ -1192,6 +1117,66 @@ declare module "ipp" {
     "xri-uri-scheme-supported"?: UriSchemes[];
   }
 
+  interface IDestionationAccesses {
+    "access-oauth-token"?: string[];
+    "access-oauth-uri"?: string;
+    "access-password"?: string;
+    "access-pin"?: string;
+    "access-user-name"?: string;
+  }
+
+  interface IDocumentAccess {
+    "access-oauth-token"?: string[];
+    "access-oauth-uri"?: string;
+    "access-password"?: string;
+    "access-pin"?: string;
+    "access-user-name"?: string;
+  }
+
+  interface IDocumentFormatDetails {
+    "document-format"?: MimeMediaType;
+    "document-format-device-id"?: string;
+    "document-format-version"?: string;
+    "document-natural-language"?: string[];
+    "document-source-application-name"?: string;
+    "document-source-application-version"?: string;
+    "document-source-os-name"?: string;
+    "document-source-os-version"?: string;
+  }
+
+  interface IInputAttributes {
+    "input-auto-scaling"?: boolean;
+    "input-auto-skew-correction"?: boolean;
+    "input-brightness"?: number;
+    "input-color-mode"?: InputColorMode;
+    "input-content-type"?: InputContentType;
+    "input-contrast"?: number;
+    "input-film-scan-mode"?: InputFilmScanMode;
+    "input-images-to-transfer"?: number;
+    "input-media"?: MediaName | MediaSizeName;
+    "input-orientation-requested"?: OrientationRequested;
+    "input-quality"?: PrintQuality;
+    "input-resolution"?: string;
+    "input-scaling-height"?: number;
+    "input-scaling-width"?: number;
+    "input-scan-regions"?: IPPScanRegions[];
+    "input-sharpness"?: number;
+    "input-sides"?: Sides;
+    "input-source"?: InputSource;
+  }
+
+  interface IPPScanRegions {
+    "x-dimension"?: number;
+    "x-origin"?: number;
+    "y-dimension"?: number;
+    "y-origin"?: number;
+  }
+
+  interface IOutputAttributes {
+    "noise-removal"?: number;
+    "output-compression-quality-factor"?: number;
+  }
+
   interface IDestinationUriReady {
     "destination-attributes": any[];
     "destination-attributes-supported"?: string[];
@@ -1257,7 +1242,7 @@ declare module "ipp" {
     "z-dimension"?: number;
   }
 
-  interface IPrinterXriSupported {
+  interface IPrinterXri {
     "xri-authentication"?: XriAuthentication;
     "xri-security"?: XriSecurity;
     "xri-uri"?: string;
@@ -1372,7 +1357,7 @@ declare module "ipp" {
     binding?: IFinishingBinding;
     coating?: IFinishingCoating;
     covering?: IFinishingCovering;
-    "finishing-template"?: FinishingTemplate;
+    "finishing-template"?: Finishings;
     folding?: IFinishingFolding[];
     "imposition-template"?: ImpositionTemplate;
     laminating?: IFinishingLaminating;
@@ -4170,7 +4155,7 @@ type InputColorMode =
 
 type FoldingDirection = "inward" | "outward";
 
-type FinishingTemplate =
+type Finishings =
   | "bale"
   | "bind"
   | "bind-bottom"
@@ -4344,3 +4329,11 @@ type CoatingType =
   | "semi-gloss"
   | "silicone"
   | "translucent";
+
+type IPPVersion = "1.0" | "1.1" | "2.0" | "2.1" | "2.2";
+
+type JobAccountType = "general" | "group" | "none";
+
+type MultipleObjectHandling = "auto" | "best-fit" | "best-quality" | "best-speed" | "one-at-a-time";
+
+type Overrides = keyof IJobTemplateAttributes | "document-copies" | "document-numbers" | "pages";
