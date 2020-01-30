@@ -19,7 +19,14 @@ import {
   Resolution,
   Sides,
 } from "ipp";
-import rp from "request-promise";
+
+export interface IPrintJobInfo {
+  buffer?: Buffer;
+  fileType?: MimeMediaType;
+  jobName: string;
+  path?: string;
+  username: string;
+}
 
 export interface IStatus {
   "document-format-default": MimeMediaType;
@@ -130,27 +137,28 @@ export class IPPPrinter {
     });
   };
 
-  public printFile = (path: string, fileType: MimeMediaType, documentName: string, username: string, jobName?: string): Promise<number> => {
+  public printFile = (options: IPrintJobInfo): Promise<number> => {
     return new Promise(async (resolve, reject) => {
       const buffer: Promise<Buffer> = new Promise(async (res, rej) => {
-        if (path.indexOf("http") === 0) {
-          res(await rp.get({ url: path, encoding: null }));
-        } else {
-          fs.readFile(path, (e, data) => {
+        if (options.buffer) {
+          res(options.buffer);
+        } else if (options.path) {
+          fs.readFile(options.path, (e, data) => {
             if (e) {
               return rej(e);
             }
             res(data);
           });
+        } else {
+          rej("Neither path of Buffer provided.");
         }
       });
 
       const request: IPrintJobRequest = {
         "operation-attributes-tag": {
-          "requesting-user-name": username,
-          "document-format": fileType,
-          "job-name": jobName ? jobName : documentName,
-          "document-name": documentName,
+          "requesting-user-name": options.username,
+          "document-format": options.fileType || "application/octet-stream",
+          "job-name": options.jobName,
         },
         data: await buffer,
       };
@@ -254,13 +262,13 @@ export class IPPPrinter {
 //   "number-of-intervening-jobs"?: number;
 // }
 
-const p = new IPPPrinter("http://banksy.tf.fi");
+// const p = new IPPPrinter("http://banksy.tf.fi");
 
 // p.printFile("https://www.w3.org/TR/PNG/iso_8859-1.txt", "text/plain", "USERRR", "testfile.txt").then(res => {
 //   console.log(res);
 // }).catch(e => console.log(e));
 
-p.printerStatus("hello");
+// p.printerStatus("hello");
 
 // p.getAllJobs().then(res => {
 //   console.log(res);
