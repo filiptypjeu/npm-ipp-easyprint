@@ -533,7 +533,7 @@ declare module "ipp" {
     overrides?: Overrides[];
     "page-delivery"?: PageDelivery;
     "page-order-received"?: PageOrder;
-    "page-ranges": string;
+    "page-ranges"?: string;
     "pages-per-subset"?: number[];
     "pclm-source-resolution"?: Resolution;
     "pdl-init-file"?: IPdlInitFile;
@@ -1225,7 +1225,7 @@ declare module "ipp" {
   }
 
   interface IDestinationUriReady {
-    "destination-attributes": any[];
+    "destination-attributes"?: any[];
     "destination-attributes-supported"?: string[];
     "destination-info"?: string;
     "destination-is-directory"?: boolean;
@@ -1445,7 +1445,7 @@ declare module "ipp" {
   interface ISaveInfo {
     "save-document-format"?: MimeMediaType;
     "save-location"?: string;
-    "save-name": string;
+    "save-name"?: string;
   }
 
   interface IJobSheets {
@@ -1462,7 +1462,7 @@ declare module "ipp" {
     "material-diameter-tolerance"?: number;
     "material-fill-density"?: number;
     "material-key"?: string;
-    "material-name": string;
+    "material-name"?: string;
     "material-nozzle-diameter"?: number;
     "material-purpose"?: MaterialPurpose[];
     "material-rate"?: number;
@@ -1503,9 +1503,9 @@ declare module "ipp" {
   }
 
   interface IPdlInitFile {
-    "pdl-init-file-entry": string;
+    "pdl-init-file-entry"?: string;
     "pdl-init-file-location"?: string;
-    "pdl-init-file-name": string;
+    "pdl-init-file-name"?: string;
   }
 
   interface IPrintAccuracy {
