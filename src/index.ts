@@ -1,5 +1,6 @@
 import fs from "fs";
 import {
+  IdentifyActions,
   IFullRequest,
   IGetPrinterAttributesRequest,
   IPrinterDescription,
@@ -7,7 +8,6 @@ import {
   IPrintJobRequest,
   MimeMediaType,
   Printer,
-  IdentifyActions,
 } from "ipp";
 
 export interface IPrintJobInfo {
@@ -26,7 +26,11 @@ export class IPPPrinter {
     this.printer = new Printer(url);
   }
 
-  public printerStatus = (username: string, attributes: Array<keyof IPrinterDescription | keyof IPrinterStatus>, fileType?: MimeMediaType): Promise<object> => {
+  public printerStatus = (
+    username: string,
+    attributes: Array<keyof IPrinterDescription | keyof IPrinterStatus>,
+    fileType?: MimeMediaType
+  ): Promise<object> => {
     const request: IGetPrinterAttributesRequest = {
       "operation-attributes-tag": {
         "requesting-user-name": username,
@@ -104,7 +108,7 @@ export class IPPPrinter {
       const request: IFullRequest = {
         "operation-attributes-tag": {
           "identify-actions": identifyAction || ["sound"],
-        }
+        },
       };
 
       this.printer.execute("Identify-Printer", request, (e, res) => {
@@ -119,7 +123,7 @@ export class IPPPrinter {
         resolve(true);
       });
     });
-  }
+  };
 
   // public getAllJobs = (
   //   username?: string,
