@@ -24,6 +24,7 @@ export interface IPrintJobInfo {
   buffer?: Buffer;
   fileType?: MimeMediaType;
   jobName: string;
+  jobAttributes?: any;
   path?: string;
   username: string;
 }
@@ -160,6 +161,7 @@ export class IPPPrinter {
           "document-format": options.fileType || "application/octet-stream",
           "job-name": options.jobName,
         },
+        "job-attributes-tag": options.jobAttributes,
         data: await buffer,
       };
 
@@ -170,6 +172,10 @@ export class IPPPrinter {
 
         if (res.statusCode !== "successful-ok") {
           return reject(res);
+        }
+
+        if (res["unsupported-attributes"]) {
+          console.log(`Unsupported attributes: ${res["unsupported-attributes"]}`);
         }
 
         resolve(res["job-attributes-tag"]["job-id"]);
@@ -254,32 +260,3 @@ export class IPPPrinter {
   //   });
   // };
 }
-
-// interface IPrintJobResponse {
-//   "job-id"?: number;
-//   "job-state"?: string;
-//   "job-state-reasons"?: string | string[];
-//   "number-of-intervening-jobs"?: number;
-// }
-
-// const p = new IPPPrinter("http://banksy.tf.fi");
-
-// p.printFile("https://www.w3.org/TR/PNG/iso_8859-1.txt", "text/plain", "USERRR", "testfile.txt").then(res => {
-//   console.log(res);
-// }).catch(e => console.log(e));
-
-// p.printerStatus("hello");
-
-// p.getAllJobs().then(res => {
-//   console.log(res);
-// }).catch(e => console.log(e));
-
-// p.getJob(9973).then(res => {
-//   console.log(res);
-// }).catch(e => console.log(e));
-
-// p.cancelJob(9973)
-//   .then(res => {
-//     console.log(res);
-//   })
-//   .catch(e => console.log(e));
