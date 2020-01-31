@@ -702,7 +702,7 @@ declare module "ipp" {
     "compression-supported"?: Compression[];
     "confirmation-sheet-print-default"?: boolean;
     "copies-default"?: number;
-    "copies-supported"?: string;
+    "copies-supported"?: number[];
     "cover-back-default"?: ICover;
     "cover-back-supported"?: string[];
     "cover-front-default"?: ICover;

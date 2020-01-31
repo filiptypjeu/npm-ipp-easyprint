@@ -30,6 +30,8 @@ export interface IPrintJobInfo {
 }
 
 export interface IStatus {
+  "copies-default": number;
+  "copies-supported": number[];
   "document-format-default": MimeMediaType;
   "document-format-supported": MimeMediaType[];
   "finishings-default": Finishings;
@@ -70,6 +72,8 @@ export interface IStatus {
 }
 
 export const statusProperties: Array<keyof IPrinterDescription | keyof IPrinterStatus> = [
+  "copies-default",
+  "copies-supported",
   "document-format-default",
   "document-format-supported",
   "finishings-default",
