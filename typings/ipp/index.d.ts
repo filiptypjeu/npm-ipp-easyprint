@@ -47,7 +47,7 @@ declare module "ipp" {
   interface IFullRequest {
     "operation-attributes-tag"?: IOperationAttributes;
     "job-attributes-tag"?: IJobTemplateAttributes;
-    data: Buffer;
+    data?: Buffer;
   }
 
   interface IFullResponse {

@@ -1,23 +1,13 @@
 import fs from "fs";
 import {
-  Finishings,
-  IdentifyActions,
+  IFullRequest,
   IGetPrinterAttributesRequest,
-  IJobTemplateAttributes,
   IPrinterDescription,
   IPrinterStatus,
   IPrintJobRequest,
-  Media,
   MimeMediaType,
-  OrientationRequested,
-  OutputBin,
-  PrintColorMode,
   Printer,
-  PrinterOpertaion,
-  PrintQuality,
-  PrintScaling,
-  Resolution,
-  Sides,
+  IdentifyActions,
 } from "ipp";
 
 export interface IPrintJobInfo {
@@ -29,84 +19,6 @@ export interface IPrintJobInfo {
   username: string;
 }
 
-export interface IStatus {
-  "copies-default": number;
-  "copies-supported": number[];
-  "document-format-default": MimeMediaType;
-  "document-format-supported": MimeMediaType[];
-  "finishings-default": Finishings;
-  "finishings-supported": Finishings[];
-  "identify-actions-default": IdentifyActions;
-  "identify-actions-supported": IdentifyActions[];
-  "job-creation-attributes-supported": Array<keyof IJobTemplateAttributes>;
-  "marker-levels"?: number[];
-  "marker-low-levels"?: number[];
-  "marker-names"?: string[];
-  "media-default": Media;
-  "media-ready": Media[];
-  "media-supported": Media[];
-  "operations-supported": PrinterOpertaion[];
-  "orientation-requested-default": OrientationRequested;
-  "orientation-requested-supported": OrientationRequested[];
-  "output-bin-default": OutputBin;
-  "output-bin-supported": OutputBin[];
-  "page-ranges-supported": boolean;
-  "print-color-mode-default": PrintColorMode;
-  "print-color-mode-supported": PrintColorMode[];
-  "print-quality-default": PrintQuality;
-  "print-quality-supported": PrintQuality[];
-  "print-scaling-default": PrintScaling;
-  "print-scaling-supported": PrintScaling[];
-  "printer-dns-sd-name": string;
-  "printer-is-accepting-jobs": boolean;
-  "printer-location": string;
-  "printer-name": string;
-  "printer-make-and-model": string;
-  "printer-organization": string;
-  "printer-resolution-default": Resolution;
-  "printer-resolution-supported": Resolution[];
-  "printer-up-time": number;
-  "queued-job-count": number;
-  "sides-default": Sides;
-  "sides-supported": Sides[];
-}
-
-export const statusProperties: Array<keyof IPrinterDescription | keyof IPrinterStatus> = [
-  "copies-default",
-  "copies-supported",
-  "document-format-default",
-  "document-format-supported",
-  "finishings-default",
-  "finishings-supported",
-  "identify-actions-default",
-  "identify-actions-supported",
-  "job-creation-attributes-supported",
-  "media-default",
-  "media-ready",
-  "media-supported",
-  "operations-supported",
-  "orientation-requested-default",
-  "orientation-requested-supported",
-  "output-bin-default",
-  "output-bin-supported",
-  "print-color-mode-default",
-  "print-color-mode-supported",
-  "print-quality-default",
-  "print-quality-supported",
-  "print-scaling-default",
-  "print-scaling-supported",
-  "printer-dns-sd-name",
-  "printer-is-accepting-jobs",
-  "printer-location",
-  "printer-name",
-  "printer-make-and-model",
-  "printer-organization",
-  "printer-up-time",
-  "queued-job-count",
-  "sides-default",
-  "sides-supported",
-];
-
 export class IPPPrinter {
   private printer: Printer;
 
@@ -114,7 +26,7 @@ export class IPPPrinter {
     this.printer = new Printer(url);
   }
 
-  public printerStatus = (username: string, fileType?: MimeMediaType): Promise<IStatus> => {
+  public printerStatus = (username: string, attributes: Array<keyof IPrinterDescription | keyof IPrinterStatus>, fileType?: MimeMediaType): Promise<object> => {
     const request: IGetPrinterAttributesRequest = {
       "operation-attributes-tag": {
         "requesting-user-name": username,
@@ -133,11 +45,11 @@ export class IPPPrinter {
         }
 
         const response: any = Object();
-        for (const key of statusProperties) {
+        for (const key of attributes) {
           response[key] = res["printer-attributes-tag"][key];
         }
 
-        resolve(response as IStatus);
+        resolve(response);
       });
     });
   };
@@ -186,6 +98,28 @@ export class IPPPrinter {
       });
     });
   };
+
+  public identify = (identifyAction?: IdentifyActions[]): Promise<boolean> => {
+    return new Promise(async (resolve, reject) => {
+      const request: IFullRequest = {
+        "operation-attributes-tag": {
+          "identify-actions": identifyAction || ["sound"],
+        }
+      };
+
+      this.printer.execute("Identify-Printer", request, (e, res) => {
+        if (e) {
+          return reject(e);
+        }
+
+        if (res.statusCode !== "successful-ok") {
+          return reject(res);
+        }
+
+        resolve(true);
+      });
+    });
+  }
 
   // public getAllJobs = (
   //   username?: string,
