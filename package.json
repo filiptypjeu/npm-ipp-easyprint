@@ -23,7 +23,6 @@
     "devDependencies": {
         "@types/jest": "^24.9.1",
         "@types/node": "^13.5.0",
-        "@types/request-promise": "^4.1.45",
         "jest": "^24.9.0",
         "nodemon": "^1.19.4",
         "prettier": "^1.19.1",
@@ -36,9 +35,7 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "fs": "0.0.1-security",
-        "ipp": "git+ssh://git@github.com/filiptypjeu/ipp.git#finishings",
-        "pdfkit": "^0.11.0",
-        "request-promise": "^4.2.5"
+        "ipp": "git+ssh://git@github.com/filiptypjeu/ipp.git#finishings"
     },
     "repository": {
         "type": "git",
