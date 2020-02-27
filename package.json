@@ -46,8 +46,8 @@
         "print"
     ],
     "files": [
-        "dist/index.d.ts",
-        "typings/ipp/index.d.ts"
+        "dist",
+        "typings"
     ],
     "homepage": "https://github.com/filiptypjeu/npm-ipp-easyprint"
 }

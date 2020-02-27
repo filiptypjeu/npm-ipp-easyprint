@@ -19,6 +19,10 @@ export interface IPrintJobInfo {
   username: string;
 }
 
+export type IStatus = {
+  [key in (keyof IPrinterDescription | keyof IPrinterStatus)]?: any;
+};
+
 export class IPPPrinter {
   private printer: Printer;
 
@@ -28,9 +32,9 @@ export class IPPPrinter {
 
   public printerStatus = (
     username: string,
-    attributes: Array<keyof IPrinterDescription | keyof IPrinterStatus>,
+    attributes: Array<keyof IPrinterDescription | keyof IPrinterStatus> | "all",
     fileType?: MimeMediaType
-  ): Promise<object> => {
+  ) => {
     const request: IGetPrinterAttributesRequest = {
       "operation-attributes-tag": {
         "requesting-user-name": username,
@@ -47,10 +51,18 @@ export class IPPPrinter {
         if (e) {
           return reject(e);
         }
+        
+        if (res.statusCode !== "successful-ok") {
+          return reject(res)
+        }
 
-        const response: any = Object();
+        if (attributes === "all") {
+          return resolve(res["printer-attributes-tag"] as IStatus);
+        }
+
+        const response: IStatus = {};
         for (const key of attributes) {
-          response[key] = res["printer-attributes-tag"][key];
+          response[key as (keyof IPrinterDescription | keyof IPrinterStatus)] = res["printer-attributes-tag"][key];
         }
 
         resolve(response);
