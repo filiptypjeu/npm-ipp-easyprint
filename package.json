@@ -32,7 +32,6 @@
         "tslint-config-prettier": "^1.18.0",
         "typescript": "^3.7.5"
     },
-    "types": "dist/index.d.ts",
     "dependencies": {
         "fs": "0.0.1-security",
         "ipp": "git+ssh://git@github.com/filiptypjeu/ipp.git#finishings"
@@ -47,7 +46,8 @@
         "print"
     ],
     "files": [
-        "dist/**/*"
+        "dist/index.d.ts",
+        "typings/ipp/index.d.ts"
     ],
     "homepage": "https://github.com/filiptypjeu/npm-ipp-easyprint"
 }
