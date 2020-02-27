@@ -20,7 +20,7 @@ export interface IPrintJobInfo {
 }
 
 export type IStatus = {
-  [key in (keyof IPrinterDescription | keyof IPrinterStatus)]?: any;
+  [key in keyof IPrinterDescription | keyof IPrinterStatus]?: any;
 };
 
 export class IPPPrinter {
@@ -51,9 +51,9 @@ export class IPPPrinter {
         if (e) {
           return reject(e);
         }
-        
+
         if (res.statusCode !== "successful-ok") {
-          return reject(res)
+          return reject(res);
         }
 
         if (attributes === "all") {
@@ -62,7 +62,7 @@ export class IPPPrinter {
 
         const response: IStatus = {};
         for (const key of attributes) {
-          response[key as (keyof IPrinterDescription | keyof IPrinterStatus)] = res["printer-attributes-tag"][key];
+          response[key as keyof IPrinterDescription | keyof IPrinterStatus] = res["printer-attributes-tag"][key];
         }
 
         resolve(response);
