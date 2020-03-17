@@ -34,7 +34,7 @@ export class IPPPrinter {
     username: string,
     attributes: Array<keyof IPrinterDescription | keyof IPrinterStatus> | "all",
     fileType?: MimeMediaType
-  ): Promise<IStatus>  => {
+  ): Promise<IStatus> => {
     const request: IGetPrinterAttributesRequest = {
       "operation-attributes-tag": {
         "requesting-user-name": username,
