@@ -1,13 +1,13 @@
 import fs from "fs";
 import {
+  FullRequest,
+  GetPrinterAttributesRequest,
   IdentifyActions,
-  IFullRequest,
-  IGetPrinterAttributesRequest,
-  IPrinterDescription,
-  IPrinterStatus,
-  IPrintJobRequest,
   MimeMediaType,
   Printer,
+  PrinterDescription,
+  PrinterStatus,
+  PrintJobRequest,
 } from "ipp";
 
 export interface IPrintJobInfo {
@@ -20,7 +20,7 @@ export interface IPrintJobInfo {
 }
 
 export type IStatus = {
-  [key in keyof IPrinterDescription | keyof IPrinterStatus]?: any;
+  [key in keyof PrinterDescription | keyof PrinterStatus]?: any;
 };
 
 export class IPPPrinter {
@@ -32,10 +32,10 @@ export class IPPPrinter {
 
   public printerStatus = (
     username: string,
-    attributes: Array<keyof IPrinterDescription | keyof IPrinterStatus> | "all",
+    attributes: Array<keyof PrinterDescription | keyof PrinterStatus> | "all",
     fileType?: MimeMediaType
   ): Promise<IStatus> => {
-    const request: IGetPrinterAttributesRequest = {
+    const request: GetPrinterAttributesRequest = {
       "operation-attributes-tag": {
         "requesting-user-name": username,
         "requested-attributes": ["all"],
@@ -62,7 +62,7 @@ export class IPPPrinter {
 
         const response: IStatus = {};
         for (const key of attributes) {
-          response[key as keyof IPrinterDescription | keyof IPrinterStatus] = res["printer-attributes-tag"][key];
+          response[key as keyof PrinterDescription | keyof PrinterStatus] = res["printer-attributes-tag"][key as keyof object];
         }
 
         return resolve(response);
@@ -87,7 +87,7 @@ export class IPPPrinter {
         }
       });
 
-      const request: IPrintJobRequest = {
+      const request: PrintJobRequest = {
         "operation-attributes-tag": {
           "requesting-user-name": options.username,
           "document-format": options.fileType || "application/octet-stream",
@@ -117,7 +117,7 @@ export class IPPPrinter {
 
   public identify = (identifyAction?: IdentifyActions[]): Promise<boolean> => {
     return new Promise(async (resolve, reject) => {
-      const request: IFullRequest = {
+      const request: FullRequest = {
         "operation-attributes-tag": {
           "identify-actions": identifyAction || ["sound"],
         },

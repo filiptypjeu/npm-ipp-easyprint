@@ -21,16 +21,17 @@
     "author": "Filip Stenbacka",
     "license": "ISC",
     "devDependencies": {
+        "@types/ipp": "^2.0.0",
         "@types/jest": "^24.9.1",
-        "@types/node": "^13.5.0",
+        "@types/node": "^13.13.4",
         "jest": "^24.9.0",
         "nodemon": "^1.19.4",
         "prettier": "^1.19.1",
-        "ts-jest": "^24.2.0",
-        "ts-node": "^8.6.2",
+        "ts-jest": "^24.3.0",
+        "ts-node": "^8.9.1",
         "tslint": "^5.20.1",
         "tslint-config-prettier": "^1.18.0",
-        "typescript": "^3.7.5"
+        "typescript": "^3.8.3"
     },
     "dependencies": {
         "fs": "0.0.1-security",
