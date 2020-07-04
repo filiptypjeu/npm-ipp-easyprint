@@ -1,6 +1,10 @@
 # ipp-easyprint
 This NPM package allows for easy interfacing to a network printer via IPP.
 
+This package is build upon the [ipp](https://www.npmjs.com/package/ipp) package and my own [TS types](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/ipp/index.d.ts).
+
+Notice that this package was mainly built for my own needs, and it is therefore not thouroughly tested.
+
 ## Usage
 Set up the printer by providing the HTTP address to the printer.
 ```ts
