@@ -11,11 +11,11 @@ Fetch the current status of the printer. Specific attributes can be requested, a
 <https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/ipp/index.d.ts>
 or
 <https://www.iana.org/assignments/ipp-registrations/ipp-registrations.xhtml#ipp-registrations-2>.
-If no attribute is specified, all available attributes are returned.
+Get all available attributes by providing "all".
 
 This is a helpful method for getting insight in which job attributes the printer supports.
 ```ts
-const status: object = await printer.printerStatus();
+const status: object = await printer.printerStatus("all");
 ```
 
 
