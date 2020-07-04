@@ -1,13 +1,13 @@
 import fs from "fs";
 import {
+  FullRequest,
+  GetPrinterAttributesRequest,
   IdentifyActions,
-  IFullRequest,
-  IGetPrinterAttributesRequest,
-  IPrinterDescription,
-  IPrinterStatus,
-  IPrintJobRequest,
   MimeMediaType,
   Printer,
+  PrinterDescription,
+  PrinterStatus,
+  PrintJobRequest,
 } from "ipp";
 
 export interface IPrintJobInfo {
@@ -16,7 +16,7 @@ export interface IPrintJobInfo {
   jobName: string;
   jobAttributes?: any;
   path?: string;
-  username: string;
+  username?: string;
 }
 
 export class IPPPrinter {
@@ -26,14 +26,21 @@ export class IPPPrinter {
     this.printer = new Printer(url);
   }
 
+  /**
+   * Fetch the status of the printer.
+   *
+   * @param attributes Array of attributes to fetch. Too many possibilities to list here. Will give all available attributes if left as undefined.
+   * @param username The username to include in the IPP request. This is mandatory according to the IPP standard, but printers usually don't care about the username if not set up to do so.
+   * @param fileType Provide the file type to only get attributes relevant for that file type.
+   */
   public printerStatus = (
-    username: string,
-    attributes: Array<keyof IPrinterDescription | keyof IPrinterStatus>,
+    attributes?: Array<keyof PrinterDescription | keyof PrinterStatus>,
+    username?: string,
     fileType?: MimeMediaType
   ): Promise<object> => {
-    const request: IGetPrinterAttributesRequest = {
+    const request: GetPrinterAttributesRequest = {
       "operation-attributes-tag": {
-        "requesting-user-name": username,
+        "requesting-user-name": username || "user",
         "requested-attributes": ["all"],
       },
     };
@@ -48,9 +55,13 @@ export class IPPPrinter {
           return reject(e);
         }
 
+        if (!attributes) {
+          return resolve(res["printer-attributes-tag"]);
+        }
+
         const response: any = Object();
         for (const key of attributes) {
-          response[key] = res["printer-attributes-tag"][key];
+          response[key] = res["printer-attributes-tag"][key as keyof object];
         }
 
         resolve(response);
@@ -58,6 +69,20 @@ export class IPPPrinter {
     });
   };
 
+  /**
+   * Print a file from disk or Buffer.
+   *
+   * @param options An object with the following properties:
+   *   @property buffer?: Buffer;
+   *   @property fileType?: MimeMediaType;
+   *   @property jobName: string;
+   *   @property jobAttributes?: any;
+   *   @property path?: string;
+   *   @property username: string;
+   * Either path to disk or Buffer need to be provided.
+   *
+   * @returns the job ID if successful.
+   */
   public printFile = (options: IPrintJobInfo): Promise<number> => {
     return new Promise(async (resolve, reject) => {
       const buffer: Promise<Buffer> = new Promise(async (res, rej) => {
@@ -75,9 +100,9 @@ export class IPPPrinter {
         }
       });
 
-      const request: IPrintJobRequest = {
+      const request: PrintJobRequest = {
         "operation-attributes-tag": {
-          "requesting-user-name": options.username,
+          "requesting-user-name": options.username || "user",
           "document-format": options.fileType || "application/octet-stream",
           "job-name": options.jobName,
         },
@@ -103,11 +128,19 @@ export class IPPPrinter {
     });
   };
 
-  public identify = (identifyAction?: IdentifyActions[]): Promise<boolean> => {
+  /**
+   * Sends an identify request to the printer.
+   *
+   * @param identifyAction The action the printer should take to identify itself. The available actions are 'display', 'flash', 'sound' and 'speak'. Not all printers support all actions.
+   *
+   * @returns whether or not the request was successful.
+   */
+  public identify = (identifyAction?: IdentifyActions[], username?: string): Promise<boolean> => {
     return new Promise(async (resolve, reject) => {
-      const request: IFullRequest = {
+      const request: FullRequest = {
         "operation-attributes-tag": {
           "identify-actions": identifyAction || ["sound"],
+          "requesting-user-name": username || "user",
         },
       };
 
