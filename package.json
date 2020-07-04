@@ -1,6 +1,6 @@
 {
     "name": "ipp-easyprint",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "description": "NPM package that allows easy printing via IPP.",
     "main": "dist/index.js",
     "scripts": {
@@ -33,7 +33,6 @@
         "tslint-config-prettier": "^1.18.0",
         "typescript": "^3.9.6"
     },
-    "types": "dist/index.d.ts",
     "dependencies": {
         "fs": "0.0.1-security",
         "ipp": "git+ssh://git@github.com/filiptypjeu/ipp.git#finishings"
@@ -48,7 +47,8 @@
         "print"
     ],
     "files": [
-        "dist/**/*"
+        "dist",
+        "typings"
     ],
     "homepage": "https://github.com/filiptypjeu/npm-ipp-easyprint"
 }

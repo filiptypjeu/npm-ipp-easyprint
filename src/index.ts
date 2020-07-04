@@ -19,6 +19,10 @@ export interface IPrintJobInfo {
   username?: string;
 }
 
+export type IStatus = {
+  [key in keyof PrinterDescription | keyof PrinterStatus]?: any;
+};
+
 export class IPPPrinter {
   private printer: Printer;
 
@@ -34,10 +38,10 @@ export class IPPPrinter {
    * @param fileType Provide the file type to only get attributes relevant for that file type.
    */
   public printerStatus = (
-    attributes?: Array<keyof PrinterDescription | keyof PrinterStatus>,
+    attributes: Array<keyof PrinterDescription | keyof PrinterStatus> | "all",
     username?: string,
     fileType?: MimeMediaType
-  ): Promise<object> => {
+  ): Promise<IStatus> => {
     const request: GetPrinterAttributesRequest = {
       "operation-attributes-tag": {
         "requesting-user-name": username || "user",
@@ -55,16 +59,20 @@ export class IPPPrinter {
           return reject(e);
         }
 
-        if (!attributes) {
-          return resolve(res["printer-attributes-tag"]);
+        if (res.statusCode !== "successful-ok") {
+          return reject(res);
         }
 
-        const response: any = Object();
+        if (attributes === "all") {
+          return resolve(res["printer-attributes-tag"] as IStatus);
+        }
+
+        const response: IStatus = {};
         for (const key of attributes) {
-          response[key] = res["printer-attributes-tag"][key as keyof object];
+          response[key as keyof PrinterDescription | keyof PrinterStatus] = res["printer-attributes-tag"][key as keyof object];
         }
 
-        resolve(response);
+        return resolve(response);
       });
     });
   };
