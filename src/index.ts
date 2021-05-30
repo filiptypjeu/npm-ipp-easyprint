@@ -38,7 +38,7 @@ export class IPPPrinter {
    * @param fileType Provide the file type to only get attributes relevant for that file type.
    */
   public printerStatus = (
-    attributes: Array<keyof PrinterDescription | keyof PrinterStatus> | "all",
+    attributes: (keyof PrinterDescription | keyof PrinterStatus)[] | "all",
     username?: string,
     fileType?: MimeMediaType
   ): Promise<IStatus> => {
