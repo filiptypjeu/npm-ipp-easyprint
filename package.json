@@ -6,7 +6,6 @@
     "scripts": {
         "build": "tsc",
         "deploy": "bash deploy.sh",
-        "dev": "nodemon src/index.ts",
         "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"typings/**/*.d.ts\"",
         "lint": "tslint -p tsconfig.json",
         "lint-fix": "tslint -p tsconfig.json --fix",
@@ -15,20 +14,16 @@
         "prepublishOnly": "npm test && npm run lint",
         "preversion": "npm run lint",
         "start": "node dist/index.js",
-        "test": "jest --config jestconfig.json --passWithNoTests",
+        "test": "",
         "version": "npm run format && git add -A src"
     },
     "author": "Filip Stenbacka",
     "license": "ISC",
     "devDependencies": {
         "@types/ipp": "^2.0.0",
-        "@types/jest": "^24.9.1",
-        "@types/node": "^13.13.12",
-        "jest": "^26.1.0",
-        "nodemon": "^2.0.4",
+        "@types/node": "^15.6.1",
         "prettier": "^1.19.1",
-        "ts-jest": "^26.1.1",
-        "ts-node": "^8.10.2",
+        "ts-node": "^10.0.0",
         "tslint": "^5.20.1",
         "tslint-config-prettier": "^1.18.0",
         "typescript": "^3.9.6"
