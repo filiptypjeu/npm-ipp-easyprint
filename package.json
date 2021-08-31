@@ -28,8 +28,8 @@
         "typescript": "^3.9.6"
     },
     "dependencies": {
-        "fs": "0.0.1-security",
-        "ipp": "git+ssh://git@github.com/filiptypjeu/ipp.git#finishings"
+        "@sealsystems/ipp": "^2.7.7",
+        "fs": "0.0.1-security"
     },
     "repository": {
         "type": "git",
