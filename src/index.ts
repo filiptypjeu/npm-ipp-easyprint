@@ -1,5 +1,14 @@
 import fs from "fs";
-import { FullRequest, GetPrinterAttributesRequest, IdentifyActions, MimeMediaType, Printer, PrinterDescription, PrinterStatus, PrintJobRequest } from "@sealsystems/ipp";
+import {
+  FullRequest,
+  GetPrinterAttributesRequest,
+  IdentifyActions,
+  MimeMediaType,
+  Printer,
+  PrinterDescription,
+  PrinterStatus,
+  PrintJobRequest,
+} from "@sealsystems/ipp";
 export * from "@sealsystems/ipp";
 
 export interface IPrintJobInfo {
