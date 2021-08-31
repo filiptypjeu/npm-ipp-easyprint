@@ -13,22 +13,24 @@
         "prepublishOnly": "npm test && npm run lint",
         "preversion": "npm run lint",
         "start": "node dist/index.js",
-        "test": "",
+        "test": "jest --config jestconfig.json",
+        "test-coverage": "jest --config jestconfig.json --coverage",
         "version": "npm run format && git add -A src"
     },
     "author": "Filip Stenbacka",
     "license": "ISC",
     "devDependencies": {
-        "@types/ipp": "^2.0.0",
+        "@types/jest": "^27.0.1",
         "@types/node": "^16.7.9",
+        "jest": "^27.1.0",
         "prettier": "^2.3.2",
+        "ts-jest": "^27.0.5",
         "tslint": "^6.1.3",
         "tslint-config-prettier": "^1.18.0",
         "typescript": "^4.4.2"
     },
     "dependencies": {
-        "@sealsystems/ipp": "^2.7.7",
-        "fs": "0.0.1-security"
+        "@sealsystems/ipp": "^2.7.7"
     },
     "repository": {
         "type": "git",
