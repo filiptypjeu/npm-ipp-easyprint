@@ -5,9 +5,7 @@
     "main": "dist/index.js",
     "scripts": {
         "build": "tsc",
-        "deploy": "bash deploy.sh",
-        "dev": "nodemon src/index.ts",
-        "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"typings/**/*.d.ts\"",
+        "format": "prettier --write src/**/*.ts",
         "lint": "tslint -p tsconfig.json",
         "lint-fix": "tslint -p tsconfig.json --fix",
         "postversion": "git push && git push --tags",
@@ -15,7 +13,7 @@
         "prepublishOnly": "npm test && npm run lint",
         "preversion": "npm run lint",
         "start": "node dist/index.js",
-        "test": "jest --config jestconfig.json --passWithNoTests",
+        "test": "",
         "version": "npm run format && git add -A src"
     },
     "author": "Filip Stenbacka",
@@ -42,8 +40,7 @@
         "print"
     ],
     "files": [
-        "dist",
-        "typings"
+        "dist"
     ],
     "homepage": "https://github.com/filiptypjeu/npm-ipp-easyprint"
 }

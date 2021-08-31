@@ -1,14 +1,5 @@
 import fs from "fs";
-import {
-  FullRequest,
-  GetPrinterAttributesRequest,
-  IdentifyActions,
-  MimeMediaType,
-  Printer,
-  PrinterDescription,
-  PrinterStatus,
-  PrintJobRequest,
-} from "ipp";
+import { FullRequest, GetPrinterAttributesRequest, IdentifyActions, MimeMediaType, Printer, PrinterDescription, PrinterStatus, PrintJobRequest } from "ipp";
 
 export interface IPrintJobInfo {
   buffer?: Buffer;
@@ -32,7 +23,7 @@ export class IPPPrinter {
 
   public printerStatus = (
     username: string,
-    attributes: Array<keyof PrinterDescription | keyof PrinterStatus> | "all",
+    attributes: (keyof PrinterDescription | keyof PrinterStatus)[] | "all",
     fileType?: MimeMediaType
   ): Promise<IStatus> => {
     const request: GetPrinterAttributesRequest = {
