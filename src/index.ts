@@ -1,14 +1,5 @@
 import fs from "fs";
-import {
-  FullRequest,
-  GetPrinterAttributesRequest,
-  IdentifyActions,
-  MimeMediaType,
-  Printer,
-  PrinterDescription,
-  PrinterStatus,
-  PrintJobRequest,
-} from "ipp";
+import { FullRequest, GetPrinterAttributesRequest, IdentifyActions, MimeMediaType, Printer, PrinterDescription, PrinterStatus, PrintJobRequest } from "ipp";
 
 export interface IPrintJobInfo {
   buffer?: Buffer;
