@@ -1,3 +1,5 @@
+/// <reference types="./../typings/@sealsystems__ipp" />
+
 import fs from "fs";
 import {
   FullRequest,
@@ -9,7 +11,6 @@ import {
   PrinterStatus,
   PrintJobRequest,
 } from "@sealsystems/ipp";
-export * from "@sealsystems/ipp";
 
 export interface IPrintJobInfo {
   buffer?: Buffer;

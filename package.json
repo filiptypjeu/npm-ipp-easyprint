@@ -3,9 +3,11 @@
     "version": "3.0.4",
     "description": "NPM package that allows easy printing via IPP.",
     "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "scripts": {
         "build": "tsc",
         "format": "prettier --write src/**/*.ts",
+        "link": "npm run build && npm link",
         "lint": "tslint -p tsconfig.json",
         "lint-fix": "tslint -p tsconfig.json --fix",
         "postversion": "git push && git push --tags",
