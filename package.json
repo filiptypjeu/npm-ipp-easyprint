@@ -1,6 +1,6 @@
 {
     "name": "ipp-easyprint",
-    "version": "3.0.4",
+    "version": "3.0.5",
     "description": "NPM package that allows easy printing via IPP.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
